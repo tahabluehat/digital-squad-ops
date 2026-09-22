@@ -267,3 +267,44 @@
 @utility ds-measure {
   max-width: 62ch;
 }
+
+@utility ds-btn-primary {
+  background-color: var(--ds-primary);
+  color: var(--ds-on-primary);
+  &:hover {
+    background-color: var(--ds-primary-hover);
+  }
+  &:active {
+    background-color: var(--ds-primary-active);
+  }
+}
+
+@utility ds-btn-secondary {
+  background-color: var(--ds-surface);
+  color: var(--ds-text);
+  border: 1px solid var(--ds-control-border);
+  &:hover {
+    background-color: var(--ds-surface-subtle);
+  }
+}
+
+@utility ds-btn-inverse-primary {
+  background-color: var(--ds-inverse-primary);
+  color: var(--ds-inverse-on-primary);
+  &:hover {
+    background-color: var(--ds-inverse-primary-hover);
+  }
+  &:active {
+    background-color: var(--ds-inverse-primary-active);
+    transform: translateY(1px);
+  }
+}
+
+@utility ds-btn-inverse-secondary {
+  background-color: transparent;
+  color: var(--ds-inverse-text);
+  border: 1px solid var(--ds-inverse-control-border);
+  &:hover {
+    background-color: var(--ds-inverse-raised);
+  }
+}
