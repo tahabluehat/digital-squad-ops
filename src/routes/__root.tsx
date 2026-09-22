@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 import appCss from "../styles.css?url";
@@ -125,6 +125,17 @@ const navLinks = [
 function Header() {
   const [open, setOpen] = useState(false);
 
+  function goToContact(event: MouseEvent<HTMLAnchorElement>) {
+    if (window.location.pathname !== "/") return;
+
+    event.preventDefault();
+    setOpen(false);
+    window.setTimeout(() => {
+      window.location.hash = "contact";
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, open ? 350 : 0);
+  }
+
   return (
     <header
       className="sticky top-0 z-50 w-full border-b"
@@ -158,9 +169,9 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Link to="/" hash="contact" className={buttonStyles.primary}>
+          <a href="/#contact" onClick={goToContact} className={buttonStyles.primary}>
             Discuss your project
-          </Link>
+          </a>
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -188,14 +199,13 @@ function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/"
-                hash="contact"
-                onClick={() => setOpen(false)}
+              <a
+                href="/#contact"
+                onClick={goToContact}
                 className={`${buttonStyles.primary} mt-4`}
               >
                 Discuss your project
-              </Link>
+              </a>
             </nav>
           </SheetContent>
         </Sheet>
@@ -220,7 +230,7 @@ function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center justify-center rounded-[var(--ds-radius-control)] bg-white p-2">
+              <span className="inline-flex items-center justify-center">
                 <img src="/images/squad.png" alt="" width={32} height={32} className="h-8 w-auto" />
               </span>
               <span
