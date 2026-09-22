@@ -158,9 +158,9 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Link to="/" hash="contact" className={buttonStyles.primary}>
+          <a href="/#contact" className={buttonStyles.primary}>
             Discuss your project
-          </Link>
+          </a>
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -188,14 +188,13 @@ function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/"
-                hash="contact"
+              <a
+                href="/#contact"
                 onClick={() => setOpen(false)}
                 className={`${buttonStyles.primary} mt-4`}
               >
                 Discuss your project
-              </Link>
+              </a>
             </nav>
           </SheetContent>
         </Sheet>
@@ -220,7 +219,7 @@ function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center justify-center rounded-[var(--ds-radius-control)] bg-white p-2">
+              <span className="inline-flex items-center justify-center">
                 <img src="/images/squad.png" alt="" width={32} height={32} className="h-8 w-auto" />
               </span>
               <span

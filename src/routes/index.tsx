@@ -55,7 +55,7 @@ const services = [
 
 const references = [
   { name: "CDG Capital", src: "/images/brand-1.png" },
-  { name: "Intelcia", src: "/images/brand-2.jpg" },
+  { name: "Intelcia", src: "/images/brand-2.png" },
   { name: "Docaposte", src: "/images/brand-3.png" },
   { name: "Omnia Academy", src: "/images/brand-4.png" },
 ];
@@ -96,22 +96,18 @@ function selectInterest(interest: string) {
 
 function HeroVisual() {
   return (
-    <div aria-hidden="true" className="relative aspect-4/3 w-full">
-      <div
-        className="absolute inset-0 rounded-[var(--ds-radius-feature)]"
-        style={{ backgroundColor: "var(--ds-brand-tint)" }}
-      />
-      <div
-        className="absolute bottom-8 left-8 h-28 w-28 rounded-full"
-        style={{ backgroundColor: "var(--ds-brand)" }}
-      />
-      <div
-        className="absolute right-10 top-10 h-40 w-40 rounded-[var(--ds-radius-feature)]"
-        style={{ backgroundColor: "var(--ds-navy)" }}
-      />
-      <div
-        className="absolute bottom-16 right-16 h-24 w-24 rounded-full border-8"
-        style={{ borderColor: "var(--ds-brand)" }}
+    <div
+      className="relative aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
+      style={{ borderColor: "var(--ds-border)" }}
+    >
+      <iframe
+        className="absolute inset-0 h-full w-full"
+        src="https://www.youtube-nocookie.com/embed/iRzLFHrvc7U?rel=0"
+        title="DigitalSquad presentation"
+        loading="eager"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
       />
     </div>
   );
