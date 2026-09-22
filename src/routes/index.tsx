@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Play } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
 import { ContactSection, INTEREST_EVENT } from "@/components/site/contact-section";
+import presentationCover from "@/assets/digitalsquad-presentation.jpg";
 
 const TITLE = "DigitalSquad | Software Engineering & Consulting";
 const DESCRIPTION =
@@ -96,20 +97,32 @@ function selectInterest(interest: string) {
 
 function HeroVisual() {
   return (
-    <div
-      className="relative aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
+    <a
+      href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Watch the DigitalSquad presentation on YouTube"
+      className="group relative block aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
       style={{ borderColor: "var(--ds-border)" }}
     >
-      <iframe
-        className="absolute inset-0 h-full w-full"
-        src="https://www.youtube-nocookie.com/embed/iRzLFHrvc7U?rel=0"
-        title="DigitalSquad presentation"
-        loading="eager"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
+      <img
+        src={presentationCover}
+        alt="DigitalSquad presentation featuring a team member speaking"
+        width={1280}
+        height={720}
+        fetchPriority="high"
+        className="h-full w-full object-cover transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-[1.015]"
       />
-    </div>
+      <span className="absolute inset-0 bg-[color-mix(in_srgb,var(--ds-navy)_18%,transparent)] transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-[color-mix(in_srgb,var(--ds-navy)_28%,transparent)]" />
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ds-brand)] text-[var(--ds-inverse-on-primary)] shadow-[var(--ds-shadow-md)] transition-transform duration-[var(--ds-duration-normal)] group-hover:scale-105 group-active:scale-95">
+          <Play className="h-7 w-7 translate-x-0.5 fill-current" aria-hidden="true" />
+        </span>
+      </span>
+      <span className="absolute bottom-4 left-4 rounded-[var(--ds-radius-control)] bg-[var(--ds-navy)] px-4 py-2 text-sm font-semibold text-[var(--ds-inverse-text)]">
+        Watch our presentation
+      </span>
+    </a>
   );
 }
 
