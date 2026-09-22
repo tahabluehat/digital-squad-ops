@@ -131,8 +131,9 @@ function Header() {
     event.preventDefault();
     setOpen(false);
     window.setTimeout(() => {
+      window.location.hash = "contact";
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, open ? 250 : 0);
+    }, open ? 350 : 0);
   }
 
   return (
