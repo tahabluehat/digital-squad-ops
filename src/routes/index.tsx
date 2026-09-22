@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Play } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
