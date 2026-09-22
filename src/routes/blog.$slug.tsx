@@ -40,7 +40,7 @@ const posts = [
 ];
 
 function BlogDetailPage() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: typeof posts[number] };
 
   return (
     <>

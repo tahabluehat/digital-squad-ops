@@ -158,9 +158,12 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Button asChild className="bg-[#f14836] text-white hover:bg-[#f14836]/90">
-            <Link to="/contact">Get in touch</Link>
-          </Button>
+          <Link
+            to="/contact"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-[#f14836] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#f14836]/90"
+          >
+            Get in touch
+          </Link>
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -184,11 +187,13 @@ function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Button asChild className="mt-4 bg-[#f14836] text-white hover:bg-[#f14836]/90">
-                <Link to="/contact" onClick={() => setOpen(false)}>
-                  Get in touch
-                </Link>
-              </Button>
+              <Link
+                to="/contact"
+                onClick={() => setOpen(false)}
+                className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-[#f14836] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#f14836]/90"
+              >
+                Get in touch
+              </Link>
             </div>
           </SheetContent>
         </Sheet>
