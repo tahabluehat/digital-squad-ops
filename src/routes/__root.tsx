@@ -125,6 +125,16 @@ const navLinks = [
 function Header() {
   const [open, setOpen] = useState(false);
 
+  function goToContact(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (window.location.pathname !== "/") return;
+
+    event.preventDefault();
+    setOpen(false);
+    window.setTimeout(() => {
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+  }
+
   return (
     <header
       className="sticky top-0 z-50 w-full border-b"
@@ -158,7 +168,7 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <a href="/#contact" className={buttonStyles.primary}>
+          <a href="/#contact" onClick={goToContact} className={buttonStyles.primary}>
             Discuss your project
           </a>
         </div>
@@ -190,7 +200,7 @@ function Header() {
               ))}
               <a
                 href="/#contact"
-                onClick={() => setOpen(false)}
+                onClick={goToContact}
                 className={`${buttonStyles.primary} mt-4`}
               >
                 Discuss your project
