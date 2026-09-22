@@ -6,31 +6,27 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  useLocation,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { Container, buttonStyles } from "@/components/site/primitives";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="ds-display">404</h1>
+        <h2 className="ds-subheading mt-4">Page not found</h2>
+        <p className="ds-lead mt-2">
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+          <Link to="/" className={buttonStyles.primary}>
             Go home
           </Link>
         </div>
@@ -49,26 +45,21 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="ds-subheading">This page didn&apos;t load</h1>
+        <p className="ds-lead mt-2">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className={buttonStyles.primary}
           >
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
+          <a href="/" className={buttonStyles.secondary}>
             Go home
           </a>
         </div>
@@ -77,29 +68,32 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const SITE_TITLE = "DigitalSquad | Software Engineering & Consulting";
+const SITE_DESCRIPTION =
+  "DigitalSquad helps businesses build, improve, and scale software with experienced engineers, product designers, and delivery specialists.";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Digital Squad — Software Development Team" },
-      { name: "description", content: "Digital Squad is a proactive, technically proficient software development agency guiding startups and established companies to success." },
-      { name: "author", content: "Digital Squad" },
-      { property: "og:title", content: "Digital Squad — Software Development Team" },
-      { property: "og:description", content: "Digital Squad is a proactive, technically proficient software development agency guiding startups and established companies to success." },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESCRIPTION },
+      { name: "author", content: "DigitalSquad" },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESCRIPTION },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@digitalsquad" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -123,34 +117,40 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/services", label: "Services" },
-  { to: "/blog", label: "Blog" },
-  { to: "/tva", label: "TVA" },
-  { to: "/contact", label: "Contact" },
+  { hash: "services", label: "Services" },
+  { hash: "work", label: "Work" },
+  { hash: "approach", label: "Approach" },
 ];
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <img src="/images/squad.png" alt="Digital Squad" className="h-10 w-auto" />
-          <span className="font-display text-xl font-bold text-[#f14836]">Digital Squad</span>
+    <header
+      className="sticky top-0 z-50 w-full border-b"
+      style={{ backgroundColor: "var(--ds-background)", borderColor: "var(--ds-border)" }}
+    >
+      <Container className="flex h-20 items-center justify-between">
+        <Link to="/" className="flex items-center gap-3" aria-label="DigitalSquad home">
+          <img
+            src="/images/squad.png"
+            alt=""
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
+          <span className="font-display text-lg font-bold tracking-[-0.025em]">
+            Digital<span style={{ color: "var(--ds-brand)" }}>Squad</span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
-              key={link.to}
-              to={link.to}
-              className={`text-sm font-medium transition-colors hover:text-[#f14836] ${
-                pathname === link.to ? "text-[#f14836]" : "text-foreground/80"
-              }`}
+              key={link.hash}
+              to="/"
+              hash={link.hash}
+              className="text-[0.9375rem] font-medium text-[var(--ds-text)] transition-colors hover:text-[var(--ds-link)]"
             >
               {link.label}
             </Link>
@@ -158,115 +158,207 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Link
-            to="/contact"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-[#f14836] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#f14836]/90"
-          >
-            Get in touch
+          <Link to="/" hash="contact" className={buttonStyles.primary}>
+            Discuss your project
           </Link>
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" aria-label="Open menu">
-              <Menu className="h-6 w-6" />
-            </Button>
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-[var(--ds-radius-control)] border"
+              style={{ borderColor: "var(--ds-border)" }}
+            >
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            </button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-72">
+          <SheetContent side="right" className="w-80 bg-[var(--ds-background)]">
             <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-            <div className="flex flex-col gap-4 pt-8">
+            <nav aria-label="Mobile" className="flex flex-col gap-2 pt-10">
               {navLinks.map((link) => (
                 <Link
-                  key={link.to}
-                  to={link.to}
+                  key={link.hash}
+                  to="/"
+                  hash={link.hash}
                   onClick={() => setOpen(false)}
-                  className={`text-lg font-medium transition-colors hover:text-[#f14836] ${
-                    pathname === link.to ? "text-[#f14836]" : "text-foreground"
-                  }`}
+                  className="flex min-h-12 items-center text-lg font-medium text-[var(--ds-text)]"
                 >
                   {link.label}
                 </Link>
               ))}
               <Link
-                to="/contact"
+                to="/"
+                hash="contact"
                 onClick={() => setOpen(false)}
-                className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-[#f14836] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#f14836]/90"
+                className={`${buttonStyles.primary} mt-4`}
               >
-                Get in touch
+                Discuss your project
               </Link>
-            </div>
+            </nav>
           </SheetContent>
         </Sheet>
-      </div>
+      </Container>
     </header>
   );
 }
 
 function Footer() {
+  const inverseLink =
+    "text-[var(--ds-inverse-secondary)] transition-colors hover:text-[var(--ds-inverse-link)] focus-visible:text-[var(--ds-inverse-link)]";
+
   return (
-    <footer className="bg-[#1a1a2e] text-white">
-      <div className="container mx-auto px-4 py-16 lg:px-8">
+    <footer
+      className="on-navy border-t"
+      style={{
+        backgroundColor: "var(--ds-inverse-surface)",
+        borderColor: "var(--ds-inverse-border)",
+      }}
+    >
+      <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <img src="/images/squad.png" alt="Digital Squad" className="h-10 w-auto" />
-              <span className="font-display text-xl font-bold text-[#f14836]">Why Us</span>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center justify-center rounded-[var(--ds-radius-control)] bg-white p-2">
+                <img src="/images/squad.png" alt="" width={32} height={32} className="h-8 w-auto" />
+              </span>
+              <span
+                className="font-display text-lg font-bold"
+                style={{ color: "var(--ds-inverse-text)" }}
+              >
+                Digital<span style={{ color: "var(--ds-brand)" }}>Squad</span>
+              </span>
             </div>
-            <p className="text-sm leading-relaxed text-white/70">
-              There are many software development agencies out there, but transparent and hardworking ones are rare.
-              Digital Squad offers top-scale services with clients’ needs in mind. Contact us about your next big project.
+            <p className="text-sm leading-relaxed" style={{ color: "var(--ds-inverse-secondary)" }}>
+              Software engineering and consulting for teams building, improving, and scaling
+              products.
             </p>
           </div>
 
           <div>
-            <h5 className="mb-6 font-display text-lg font-semibold">Services</h5>
-            <ul className="space-y-3 text-sm text-white/70">
-              <li><Link to="/services" className="hover:text-[#f14836]">Outsourcing</Link></li>
-              <li><Link to="/services" className="hover:text-[#f14836]">Auditing</Link></li>
-              <li><Link to="/services" className="hover:text-[#f14836]">Agility & Design</Link></li>
-              <li><Link to="/services" className="hover:text-[#f14836]">DevOps & Cloud</Link></li>
+            <h2
+              className="font-display text-base font-semibold"
+              style={{ color: "var(--ds-inverse-text)" }}
+            >
+              Explore
+            </h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              <li>
+                <Link to="/" hash="services" className={inverseLink}>
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/" hash="work" className={inverseLink}>
+                  Work
+                </Link>
+              </li>
+              <li>
+                <Link to="/" hash="approach" className={inverseLink}>
+                  Approach
+                </Link>
+              </li>
+              <li>
+                <Link to="/tva" className={inverseLink}>
+                  TVA calculator
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-6 font-display text-lg font-semibold">About Us</h5>
-            <ul className="space-y-3 text-sm text-white/70">
-              <li><Link to="/about" className="hover:text-[#f14836]">Overview</Link></li>
-              <li><Link to="/about" className="hover:text-[#f14836]">Why us</Link></li>
-              <li><Link to="/about" className="hover:text-[#f14836]">Awards & Recognitions</Link></li>
-              <li><Link to="/about" className="hover:text-[#f14836]">Team</Link></li>
+            <h2
+              className="font-display text-base font-semibold"
+              style={{ color: "var(--ds-inverse-text)" }}
+            >
+              Company
+            </h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              <li>
+                <Link to="/about" className={inverseLink}>
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className={inverseLink}>
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:recrutement@digitalsquad.ma" className={inverseLink}>
+                  Careers &amp; internships
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-6 font-display text-lg font-semibold">Contact Info</h5>
-            <ul className="space-y-4 text-sm text-white/70">
+            <h2
+              className="font-display text-base font-semibold"
+              style={{ color: "var(--ds-inverse-text)" }}
+            >
+              Contact
+            </h2>
+            <ul className="mt-5 space-y-4 text-sm" style={{ color: "var(--ds-inverse-secondary)" }}>
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#f14836]" />
-                <span>BD MOHAMED ZAFZAF RES SOFIA<br />N 189 APT RDC SIDI MOUMEN, CASABLANCA</span>
+                <MapPin
+                  className="mt-0.5 h-5 w-5 shrink-0"
+                  style={{ color: "var(--ds-inverse-icon)" }}
+                  aria-hidden="true"
+                />
+                <span>Casablanca, Morocco</span>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 shrink-0 text-[#f14836]" />
-                <span>contact@digitalsquad.ma</span>
+              <li className="flex items-start gap-3">
+                <Mail
+                  className="mt-0.5 h-5 w-5 shrink-0"
+                  style={{ color: "var(--ds-inverse-icon)" }}
+                  aria-hidden="true"
+                />
+                <a href="mailto:contact@digitalsquad.ma" className={inverseLink}>
+                  contact@digitalsquad.ma
+                </a>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-4 w-4 shrink-0 text-[#f14836]" />
-                <span>+212 625 29 18 97</span>
+              <li className="flex items-start gap-3">
+                <Phone
+                  className="mt-0.5 h-5 w-5 shrink-0"
+                  style={{ color: "var(--ds-inverse-icon)" }}
+                  aria-hidden="true"
+                />
+                <a href="tel:+212625291897" className={inverseLink}>
+                  +212 625 29 18 97
+                </a>
               </li>
             </ul>
             <div className="mt-6 flex gap-4">
-              <a href="https://www.youtube.com/channel/UCguqMv7qfdhjTm9JZCwspYg" target="_blank" rel="noreferrer" aria-label="YouTube" className="text-white/70 hover:text-[#f14836]">
-                <Youtube className="h-5 w-5" />
+              <a
+                href="https://www.youtube.com/channel/UCguqMv7qfdhjTm9JZCwspYg"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="DigitalSquad on YouTube"
+                className={`inline-flex h-11 w-11 items-center justify-center ${inverseLink}`}
+              >
+                <Youtube className="h-5 w-5" aria-hidden="true" />
               </a>
-              <a href="https://www.linkedin.com/company/digital-squad-ma/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-white/70 hover:text-[#f14836]">
-                <Linkedin className="h-5 w-5" />
+              <a
+                href="https://www.linkedin.com/company/digital-squad-ma/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="DigitalSquad on LinkedIn"
+                className={`inline-flex h-11 w-11 items-center justify-center ${inverseLink}`}
+              >
+                <Linkedin className="h-5 w-5" aria-hidden="true" />
               </a>
             </div>
           </div>
         </div>
-      </div>
-      <div className="border-t border-white/10 py-6 text-center text-sm text-white/50">
-        © {new Date().getFullYear()} Digital Squad. All rights reserved.
+      </Container>
+      <div className="border-t" style={{ borderColor: "var(--ds-inverse-border)" }}>
+        <Container className="py-6">
+          <p className="text-sm" style={{ color: "var(--ds-inverse-secondary)" }}>
+            © {new Date().getFullYear()} DigitalSquad. All rights reserved.
+          </p>
+        </Container>
       </div>
     </footer>
   );
@@ -278,8 +370,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-[var(--ds-radius-control)] focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold"
+        >
+          Skip to content
+        </a>
         <Header />
-        <main className="flex-1">
+        <main id="main" className="flex-1">
           <Outlet />
         </main>
         <Footer />

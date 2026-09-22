@@ -1,15 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowRight, Code, Briefcase, Cloud, Palette } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
+import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
+import { ContactSection, INTEREST_EVENT } from "@/components/site/contact-section";
+
+const TITLE = "DigitalSquad | Software Engineering & Consulting";
+const DESCRIPTION =
+  "Senior engineers, product designers, and delivery specialists helping teams build, improve, and scale software.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Digital Squad — Software Development Team" },
-      { name: "description", content: "Not all heroes wear capes. Digital Squad designs and builds software for startups and established companies." },
-      { property: "og:title", content: "Digital Squad — Software Development Team" },
-      { property: "og:description", content: "Not all heroes wear capes. Digital Squad designs and builds software for startups and established companies." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -18,110 +22,285 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { icon: Code, title: "Outsourcing", desc: "Cut costs and work with professionals on your projects." },
-  { icon: Briefcase, title: "Auditing", desc: "Ensure your software engineering is high quality and on plan." },
-  { icon: Palette, title: "Agility & Design", desc: "UX/UI design and agile coaching for better products." },
-  { icon: Cloud, title: "DevOps & Cloud", desc: "CI/CD pipelines and cloud infrastructure setup." },
+  {
+    title: "Build your product",
+    outcome: "Turn a product idea or roadmap into working software.",
+    capabilities: ["Product and UX design", "Frontend and backend engineering", "Testing and QA"],
+    cta: "Discuss a product",
+    interest: "Build your product",
+  },
+  {
+    title: "Extend your team",
+    outcome: "Bring experienced specialists into your existing engineering team.",
+    capabilities: [
+      "Software engineers and tech leads",
+      "Product designers and business analysts",
+      "Agile coaching and delivery support",
+    ],
+    cta: "Discuss team support",
+    interest: "Extend your team",
+  },
+  {
+    title: "Improve your platform",
+    outcome: "Identify technical friction and plan the next improvements.",
+    capabilities: [
+      "Code and architecture audits",
+      "Modernisation and refactoring",
+      "DevOps, CI/CD, and cloud",
+    ],
+    cta: "Discuss your platform",
+    interest: "Improve your platform",
+  },
 ];
 
-const clients = [
-  { name: "CDG Capital", href: "https://www.cdgcapital.ma/fr", src: "/images/brand-1.png" },
-  { name: "Intelcia", href: "https://www.intelcia.com/fr/it-solutions", src: "/images/brand-2.jpg" },
-  { name: "Docaposte", href: "https://www.docaposte.com/", src: "/images/brand-3.png" },
-  { name: "Omnia Academy", href: "https://www.omniacademy.ma/", src: "/images/brand-4.png" },
+const references = [
+  { name: "CDG Capital", src: "/images/brand-1.png" },
+  { name: "Intelcia", src: "/images/brand-2.jpg" },
+  { name: "Docaposte", src: "/images/brand-3.png" },
+  { name: "Omnia Academy", src: "/images/brand-4.png" },
 ];
+
+const steps = [
+  {
+    title: "Align on the need",
+    body: "We start with a short discovery conversation to understand the goal, the constraints, and what a good outcome looks like. Scope and responsibilities are agreed in writing before work begins.",
+  },
+  {
+    title: "Build together",
+    body: "Our engineers work in your rhythm — short iterations, a shared backlog, and regular demos. You see progress continuously rather than at the end.",
+  },
+  {
+    title: "Review and hand over",
+    body: "Code, documentation, and environments stay with you. We review what shipped, capture the remaining risks, and agree the next step together.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Can you join an existing engineering team?",
+    a: "Yes. We regularly embed engineers and delivery specialists into in-house teams, working with your tools, processes, and code review standards.",
+  },
+  {
+    q: "Can you work on an existing codebase?",
+    a: "Yes. We usually start with a short review of the code, architecture, and delivery setup, then propose improvements in priority order.",
+  },
+  {
+    q: "How do we start a discussion?",
+    a: "Send a short note about your goal or challenge through the form below, or email us directly. We'll reply with questions and suggest a call.",
+  },
+];
+
+function selectInterest(interest: string) {
+  window.dispatchEvent(new CustomEvent(INTEREST_EVENT, { detail: interest }));
+}
+
+function HeroVisual() {
+  return (
+    <div aria-hidden="true" className="relative aspect-4/3 w-full">
+      <div
+        className="absolute inset-0 rounded-[var(--ds-radius-feature)]"
+        style={{ backgroundColor: "var(--ds-brand-tint)" }}
+      />
+      <div
+        className="absolute bottom-8 left-8 h-28 w-28 rounded-full"
+        style={{ backgroundColor: "var(--ds-brand)" }}
+      />
+      <div
+        className="absolute right-10 top-10 h-40 w-40 rounded-[var(--ds-radius-feature)]"
+        style={{ backgroundColor: "var(--ds-navy)" }}
+      />
+      <div
+        className="absolute bottom-16 right-16 h-24 w-24 rounded-full border-8"
+        style={{ borderColor: "var(--ds-brand)" }}
+      />
+    </div>
+  );
+}
 
 function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#1a1a2e] py-24 text-white lg:py-32">
-        <div className="absolute inset-0 opacity-20">
-          <img src="/images/header-hero.jpg" alt="" className="h-full w-full object-cover" />
-        </div>
-        <div className="container relative mx-auto px-4 text-center lg:px-8">
-          <h1 className="mx-auto max-w-4xl text-4xl font-bold leading-tight lg:text-6xl">
-            Not all heroes wear capes, <span className="text-[#f14836]">some design your software!</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-white/80">
-            Digital Squad excels in guiding clients to success with a proactive and technically proficient team focused on software craftsmanship.
+      <section className="ds-section" style={{ backgroundColor: "var(--ds-background)" }}>
+        <Container>
+          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-7">
+              <p className="ds-eyebrow">Software engineering &amp; consulting</p>
+              <h1 className="ds-display mt-4 text-balance">Senior engineers. Stronger products.</h1>
+              <p className="ds-lead ds-measure mt-6">
+                DigitalSquad helps businesses build, improve, and scale software with experienced
+                engineers, product designers, and delivery specialists.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link to="/" hash="contact" className={buttonStyles.primary}>
+                  Discuss your project
+                </Link>
+                <Link to="/" hash="services" className={buttonStyles.secondary}>
+                  Explore our expertise
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HeroVisual />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Credibility */}
+      <section className="border-y py-10" style={{ borderColor: "var(--ds-border)" }}>
+        <Container>
+          <p className="text-sm font-semibold text-[var(--ds-text-secondary)]">
+            Teams we have delivered software for
           </p>
-          <form className="mx-auto mt-10 flex max-w-xl flex-col gap-3 sm:flex-row" onSubmit={(e) => e.preventDefault()}>
-            <Input
-              type="email"
-              placeholder="contact@digitalsquad.ma"
-              className="h-12 flex-1 border-white/20 bg-white/10 text-white placeholder:text-white/50"
-            />
-            <Button asChild className="h-12 bg-[#f14836] px-6 text-white hover:bg-[#f14836]/90">
-              <Link to="/contact">Get in touch</Link>
-            </Button>
-          </form>
-        </div>
+          <ul className="mt-6 flex flex-wrap items-center gap-x-12 gap-y-6">
+            {references.map((ref) => (
+              <li key={ref.name}>
+                <img
+                  src={ref.src}
+                  alt={ref.name}
+                  width={140}
+                  height={48}
+                  loading="lazy"
+                  className="h-10 w-auto object-contain"
+                />
+              </li>
+            ))}
+          </ul>
+        </Container>
       </section>
 
-      {/* About summary */}
-      <section className="py-20 lg:py-28">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="section-subtitle">Welcome</span>
-            <h2 className="section-title mt-3 text-3xl lg:text-4xl">
-              Production, brainstorming of ideas and perfect rendering of work.
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              This is what <span className="font-semibold text-[#f14836]">Digital Squad</span> is all about — a team of extremely hardworking people specialized in software development and many other fields.
-              Composed of designers, developers, agile experts and more, we have a team for every project.
-            </p>
-          </div>
-          <div className="mt-12 flex justify-center">
-            <img src="/images/about.svg" alt="About Digital Squad" className="max-w-full" />
-          </div>
-        </div>
-      </section>
-
-      {/* Services highlights */}
-      <section className="bg-[#fff0ee] py-20 lg:py-28">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="section-subtitle">Our Services</span>
-            <h2 className="section-title mt-3 text-3xl lg:text-4xl">Solutions tailored to your needs</h2>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((s) => (
-              <div key={s.title} className="rounded-xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#f14836]/10 text-[#f14836]">
-                  <s.icon className="h-6 w-6" />
-                </div>
-                <h3 className="section-title mt-4 text-xl">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+      {/* Services */}
+      <section id="services" className="ds-section scroll-mt-24">
+        <Container>
+          <SectionHeading
+            eyebrow="Ways to work together"
+            title="The right support for your next step."
+            description="Three clear ways to engage, depending on whether you need a product built, more capacity, or a clearer technical path."
+          />
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {services.map((service) => (
+              <div
+                key={service.title}
+                className="flex flex-col rounded-[var(--ds-radius-card)] border bg-white p-6 lg:p-8"
+                style={{ borderColor: "var(--ds-border)", boxShadow: "var(--ds-shadow-sm)" }}
+              >
+                <h3 className="ds-subheading">{service.title}</h3>
+                <p className="mt-3 text-[var(--ds-text-secondary)]">{service.outcome}</p>
+                <ul className="mt-6 flex-1 space-y-3 text-sm">
+                  {service.capabilities.map((capability) => (
+                    <li key={capability} className="flex items-start gap-3">
+                      <Check
+                        className="mt-0.5 h-4 w-4 shrink-0"
+                        style={{ color: "var(--ds-brand)" }}
+                        aria-hidden="true"
+                      />
+                      <span>{capability}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/"
+                  hash="contact"
+                  onClick={() => selectInterest(service.interest)}
+                  className="mt-8 inline-flex items-center gap-2 text-[0.9375rem] font-semibold underline underline-offset-4"
+                  style={{ color: "var(--ds-link)" }}
+                >
+                  {service.cta}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
               </div>
             ))}
           </div>
-          <div className="mt-10 text-center">
-            <Button asChild variant="outline" className="border-[#f14836] text-[#f14836] hover:bg-[#f14836] hover:text-white">
-              <Link to="/services" className="gap-2">
-                All Services <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
+        </Container>
       </section>
 
-      {/* References */}
-      <section className="py-20 lg:py-28">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center">
-            <span className="section-subtitle">Some References</span>
-            <h2 className="section-title mt-3 text-3xl">Trusted by leading companies</h2>
+      {/* Work */}
+      <section
+        id="work"
+        className="ds-section scroll-mt-24"
+        style={{ backgroundColor: "var(--ds-surface-subtle)" }}
+      >
+        <Container>
+          <SectionHeading
+            eyebrow="Selected work"
+            title="Engineering that fits the business context."
+            description="A short view of engagements our team has delivered. Details are kept to what we can describe accurately."
+          />
+          <div className="mt-12 space-y-8">
+            <article
+              className="grid gap-6 rounded-[var(--ds-radius-card)] border bg-white p-6 lg:grid-cols-3 lg:p-8"
+              style={{ borderColor: "var(--ds-border)" }}
+            >
+              <h3 className="ds-subheading">CDG Capital</h3>
+              <div className="lg:col-span-2 space-y-4 text-[var(--ds-text-secondary)]">
+                <p>
+                  <span className="font-semibold text-[var(--ds-text)]">Context.</span> A financial
+                  institution modernising internal business applications.
+                </p>
+                <p>
+                  <span className="font-semibold text-[var(--ds-text)]">Our contribution.</span>{" "}
+                  DigitalSquad engineers worked alongside the internal team on application
+                  development and delivery practices.
+                </p>
+              </div>
+            </article>
+            <article
+              className="grid gap-6 rounded-[var(--ds-radius-card)] border bg-white p-6 lg:grid-cols-3 lg:p-8"
+              style={{ borderColor: "var(--ds-border)" }}
+            >
+              <h3 className="ds-subheading">OCP</h3>
+              <div className="lg:col-span-2 space-y-4 text-[var(--ds-text-secondary)]">
+                <p>
+                  <span className="font-semibold text-[var(--ds-text)]">Context.</span> A large
+                  industrial group running digital programmes across multiple sites.
+                </p>
+                <p>
+                  <span className="font-semibold text-[var(--ds-text)]">Our contribution.</span>{" "}
+                  Engineering and delivery support on digital applications within the wider
+                  programme.
+                </p>
+              </div>
+            </article>
           </div>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 grayscale transition-all hover:grayscale-0">
-            {clients.map((c) => (
-              <a key={c.name} href={c.href} target="_blank" rel="noreferrer" className="block">
-                <img src={c.src} alt={c.name} className="h-16 w-auto object-contain" />
-              </a>
+        </Container>
+      </section>
+
+      {/* Approach */}
+      <section id="approach" className="ds-section scroll-mt-24">
+        <Container>
+          <SectionHeading
+            eyebrow="How we work"
+            title="Clear priorities. Visible progress."
+            description="A simple way of working that keeps scope, collaboration, and delivery visible from the first conversation."
+          />
+          <ol className="mt-12 grid gap-8 md:grid-cols-3">
+            {steps.map((step, index) => (
+              <li key={step.title}>
+                <span
+                  className="font-display text-sm font-bold"
+                  style={{ color: "var(--ds-brand)" }}
+                >
+                  0{index + 1}
+                </span>
+                <h3 className="ds-subheading mt-2">{step.title}</h3>
+                <p className="mt-3 text-[var(--ds-text-secondary)]">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
+            {faqs.map((faq) => (
+              <div key={faq.q}>
+                <h3 className="font-display text-base font-semibold">{faq.q}</h3>
+                <p className="mt-2 text-[var(--ds-text-secondary)]">{faq.a}</p>
+              </div>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
+
+      <ContactSection />
     </>
   );
 }
