@@ -113,7 +113,7 @@ function HeroVisual() {
         fetchPriority="high"
         className="h-full w-full object-cover transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-[1.015]"
       />
-      <span className="absolute inset-0 bg-[color-mix(in_srgb,var(--ds-navy)_18%,transparent)] transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-[color-mix(in_srgb,var(--ds-navy)_28%,transparent)]" />
+      <span className="absolute inset-0 bg-media-overlay transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-media-overlay-hover" />
       <span className="absolute inset-0 flex items-center justify-center">
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ds-brand)] text-[var(--ds-inverse-on-primary)] shadow-[var(--ds-shadow-md)] transition-transform duration-[var(--ds-duration-normal)] group-hover:scale-105 group-active:scale-95">
           <Play className="h-7 w-7 translate-x-0.5 fill-current" aria-hidden="true" />

@@ -25,6 +25,8 @@
   --ds-surface: #ffffff;
   --ds-surface-subtle: #f3f3f7;
   --ds-brand-tint: #fff1ed;
+  --ds-media-overlay: rgb(26 26 45 / 18%);
+  --ds-media-overlay-hover: rgb(26 26 45 / 28%);
   --ds-text: var(--ds-navy);
   --ds-text-secondary: #656575;
   --ds-border: #e5e5eb;
@@ -142,6 +144,8 @@
 
   --color-brand: var(--ds-brand);
   --color-brand-tint: var(--ds-brand-tint);
+  --color-media-overlay: var(--ds-media-overlay);
+  --color-media-overlay-hover: var(--ds-media-overlay-hover);
   --color-navy: var(--ds-navy);
   --color-navy-raised: var(--ds-inverse-raised);
   --color-navy-border: var(--ds-inverse-border);
