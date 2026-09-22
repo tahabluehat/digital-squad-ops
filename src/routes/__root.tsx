@@ -150,8 +150,8 @@ function Header() {
             height={40}
             className="h-10 w-auto"
           />
-          <span className="font-display text-lg font-bold tracking-[-0.025em]">
-            Digital<span style={{ color: "var(--ds-brand)" }}>Squad</span>
+          <span className="font-display text-lg font-bold text-[var(--ds-brand)]">
+            DigitalSquad
           </span>
         </Link>
 
@@ -235,9 +235,9 @@ function Footer() {
               </span>
               <span
                 className="font-display text-lg font-bold"
-                style={{ color: "var(--ds-inverse-text)" }}
+                style={{ color: "var(--ds-brand)" }}
               >
-                Digital<span style={{ color: "var(--ds-brand)" }}>Squad</span>
+                DigitalSquad
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "var(--ds-inverse-secondary)" }}>
