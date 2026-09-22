@@ -72,7 +72,7 @@ function ContactPage() {
               </div>
               <div>
                 <h3 className="font-display font-semibold">Address</h3>
-                <p className="mt-1 text-sm text-muted-foreground">Bd Mohamed zaf zaf<br />Im 14 appt RDC CASABLANCA</p>
+                <p className="mt-1 text-sm text-muted-foreground">BD MOHAMED ZAFZAF RES SOFIA<br />N 189 APT RDC SIDI MOUMEN, CASABLANCA</p>
               </div>
             </div>
             <div className="flex gap-4 rounded-2xl bg-white p-6 shadow-sm">
