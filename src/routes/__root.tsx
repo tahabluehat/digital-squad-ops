@@ -132,7 +132,7 @@ function Header() {
     setOpen(false);
     window.setTimeout(() => {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 0);
+    }, open ? 250 : 0);
   }
 
   return (
