@@ -5,6 +5,8 @@ const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   message: z.string().min(1, "Message is required"),
+  company: z.string().optional(),
+  interest: z.string().optional(),
 });
 
 export const submitContact = createServerFn({ method: "POST" })
@@ -22,13 +24,20 @@ export const submitContact = createServerFn({ method: "POST" })
       auth: { autoRefreshToken: false, persistSession: false },
     });
 
-    const { error } = await admin
-      .from("contact_submissions")
-      .insert({
-        name: data.name,
-        email: data.email,
-        message: data.message,
-      });
+    const details = [
+      data.company ? `Company: ${data.company}` : null,
+      data.interest ? `Area of interest: ${data.interest}` : null,
+    ].filter(Boolean);
+
+    const message = details.length
+      ? `${details.join("\n")}\n\n${data.message}`
+      : data.message;
+
+    const { error } = await admin.from("contact_submissions").insert({
+      name: data.name,
+      email: data.email,
+      message,
+    });
 
     if (error) {
       console.error("Contact submission error:", error);
