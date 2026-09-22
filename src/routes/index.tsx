@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Play } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
@@ -96,13 +97,31 @@ function selectInterest(interest: string) {
 }
 
 function HeroVisual() {
+  const [playing, setPlaying] = useState(false);
+
+  if (playing) {
+    return (
+      <div
+        className="aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
+        style={{ borderColor: "var(--ds-border)" }}
+      >
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/iRzLFHrvc7U?autoplay=1&rel=0&modestbranding=1"
+          title="DigitalSquad presentation video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="h-full w-full"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
-      <a
-        href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Watch the DigitalSquad presentation on YouTube"
+      <button
+        type="button"
+        onClick={() => setPlaying(true)}
+        aria-label="Play the DigitalSquad presentation video"
         className="group relative block aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
         style={{ borderColor: "var(--ds-border)" }}
       >
@@ -115,18 +134,17 @@ function HeroVisual() {
           className="h-full w-full object-cover transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-[1.015]"
         />
         <span className="absolute inset-0 bg-media-overlay transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-media-overlay-hover" />
-      </a>
-      <a
-        href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
-        target="_blank"
-        rel="noreferrer"
+      </button>
+      <button
+        type="button"
+        onClick={() => setPlaying(true)}
         className="inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4 transition-colors duration-[var(--ds-duration-fast)] hover:opacity-80"
         style={{ color: "var(--ds-link)" }}
       >
         <Play className="h-4 w-4" aria-hidden="true" />
         Watch our presentation
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
-      </a>
+      </button>
     </div>
   );
 }
