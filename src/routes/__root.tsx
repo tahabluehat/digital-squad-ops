@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 import appCss from "../styles.css?url";
@@ -125,7 +125,7 @@ const navLinks = [
 function Header() {
   const [open, setOpen] = useState(false);
 
-  function goToContact(event: React.MouseEvent<HTMLAnchorElement>) {
+  function goToContact(event: MouseEvent<HTMLAnchorElement>) {
     if (window.location.pathname !== "/") return;
 
     event.preventDefault();
