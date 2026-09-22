@@ -97,32 +97,37 @@ function selectInterest(interest: string) {
 
 function HeroVisual() {
   return (
-    <a
-      href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Watch the DigitalSquad presentation on YouTube"
-      className="group relative block aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
-      style={{ borderColor: "var(--ds-border)" }}
-    >
-      <img
-        src={presentationCover}
-        alt="DigitalSquad presentation featuring a team member speaking"
-        width={1280}
-        height={720}
-        fetchPriority="high"
-        className="h-full w-full object-cover transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-[1.015]"
-      />
-      <span className="absolute inset-0 bg-media-overlay transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-media-overlay-hover" />
-      <span className="absolute inset-0 flex items-center justify-center">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ds-brand)] text-[var(--ds-inverse-on-primary)] shadow-[var(--ds-shadow-md)] transition-transform duration-[var(--ds-duration-normal)] group-hover:scale-105 group-active:scale-95">
-          <Play className="h-7 w-7 translate-x-0.5 fill-current" aria-hidden="true" />
-        </span>
-      </span>
-      <span className="absolute bottom-4 left-4 rounded-[var(--ds-radius-control)] bg-[var(--ds-navy)] px-4 py-2 text-sm font-semibold text-[var(--ds-inverse-text)]">
+    <div className="flex flex-col gap-4">
+      <a
+        href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Watch the DigitalSquad presentation on YouTube"
+        className="group relative block aspect-video w-full overflow-hidden rounded-[var(--ds-radius-card)] border bg-[var(--ds-navy)] shadow-[var(--ds-shadow-md)]"
+        style={{ borderColor: "var(--ds-border)" }}
+      >
+        <img
+          src={presentationCover}
+          alt="DigitalSquad presentation featuring a team member speaking"
+          width={1280}
+          height={720}
+          fetchPriority="high"
+          className="h-full w-full object-cover transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-[1.015]"
+        />
+        <span className="absolute inset-0 bg-media-overlay transition-colors duration-[var(--ds-duration-normal)] group-hover:bg-media-overlay-hover" />
+      </a>
+      <a
+        href="https://www.youtube.com/watch?v=iRzLFHrvc7U"
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4 transition-colors duration-[var(--ds-duration-fast)] hover:opacity-80"
+        style={{ color: "var(--ds-link)" }}
+      >
+        <Play className="h-4 w-4" aria-hidden="true" />
         Watch our presentation
-      </span>
-    </a>
+        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      </a>
+    </div>
   );
 }
 
