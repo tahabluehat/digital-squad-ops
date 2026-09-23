@@ -12,6 +12,7 @@
   --fast: 150ms; --normal: 220ms; --ease: cubic-bezier(.2, 0, 0, 1);
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 400 1rem/1.6 var(--font-b); -webkit-font-smoothing: antialiased; }
 h1, h2, h3, h4 { font-family: var(--font-h); font-weight: 700; margin: 0; color: inherit; }
