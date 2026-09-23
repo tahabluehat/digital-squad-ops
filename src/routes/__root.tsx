@@ -116,10 +116,11 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-const navLinks = [
-  { hash: "services", label: "Services" },
-  { hash: "work", label: "Work" },
-  { hash: "approach", label: "Approach" },
+const navLinks: { to: string; hash?: string; label: string }[] = [
+  { to: "/", hash: "services", label: "Services" },
+  { to: "/", hash: "work", label: "Work" },
+  { to: "/", hash: "approach", label: "Approach" },
+  { to: "/blog", label: "Blog" },
 ];
 
 function Header() {
