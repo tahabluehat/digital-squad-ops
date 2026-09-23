@@ -68,8 +68,8 @@ export async function sendContactEmail(input: ContactEmailInput) {
     password,
     host,
     port,
-    ssl: port === 465,
-    tls: port !== 465,
+    ssl: port === 465 ? { rejectUnauthorized: false } : false,
+    tls: port !== 465 ? { rejectUnauthorized: false } : false,
     timeout: 20000,
   });
 
