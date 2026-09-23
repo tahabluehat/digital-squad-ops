@@ -173,7 +173,7 @@ function attempt_login(string $username, string $password): ?string
     $stmt->execute([$username]);
     $row = $stmt->fetch();
     // Verify against a dummy hash when the user is unknown, to keep timing similar.
-    $hash = $row['password_hash'] ?? '$2y$12$abcdefghijklmnopqrstuuJ3J2J7ZqMhZGmGZq0cE0Hc9m4xvK4WK';
+    $hash = $row['password_hash'] ?? password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
     $ok = password_verify($password, $hash) && $row;
     if (!$ok) {
         login_record_failure($username);

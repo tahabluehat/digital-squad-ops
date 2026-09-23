@@ -90,8 +90,9 @@ if ($isNew || preg_match('#^/admin/blog/(\d+)/edit$#', $path, $m)) {
         if (!$errors && $goLive) {
             $errors = publish_errors($d);
         }
-        if (!in_array($action, ['save_draft', 'publish', 'update'], true)) {
-            $errors['form'] = 'Unknown action.';
+        if (!in_array($action, ['save_draft', 'publish', 'update'], true)
+            || ($action === 'save_draft' && ($article['status'] ?? '') === 'published')) {
+            $errors['form'] = 'This article is live. Use "Update published article" or "Unpublish".';
         }
 
         if ($errors) {
@@ -108,11 +109,6 @@ if ($isNew || preg_match('#^/admin/blog/(\d+)/edit$#', $path, $m)) {
 
         $now = db_now();
         $status = $goLive ? 'published' : 'draft';
-        // "Save draft" on a published article is not offered; keep it live only via explicit update.
-        if ($action === 'save_draft' && ($article['status'] ?? '') === 'published') {
-            $status = 'published';
-            $goLive = true;
-        }
         $publishedAt = $goLive ? ($article['published_at'] ?? null) ?: $now : ($article['published_at'] ?? null);
         if ($action === 'publish' && ($article['status'] ?? '') !== 'published') {
             $publishedAt = $now;
