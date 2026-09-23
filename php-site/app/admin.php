@@ -109,7 +109,7 @@ if ($isNew || preg_match('#^/admin/blog/(\d+)/edit$#', $path, $m)) {
 
         $now = db_now();
         $status = $goLive ? 'published' : 'draft';
-        $publishedAt = $goLive ? ($article['published_at'] ?? null) ?: $now : ($article['published_at'] ?? null);
+        $publishedAt = $goLive ? (($article['published_at'] ?? null) ?: $now) : ($article['published_at'] ?? null);
         if ($action === 'publish' && ($article['status'] ?? '') !== 'published') {
             $publishedAt = $now;
         }
