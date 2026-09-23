@@ -141,7 +141,7 @@ async function openSocket(host: string, port: number): Promise<Duplex> {
 }
 
 export async function sendMailSmtp(options: SmtpOptions, mail: Mail) {
-  const { socket, writer, reader } = await openSocket(options.host, options.port);
+  const conn = await openSocket(options.host, options.port);
 
   let buffer = "";
 
@@ -153,9 +153,9 @@ export async function sendMailSmtp(options: SmtpOptions, mail: Mail) {
         buffer = buffer.slice(response.length);
         return response;
       }
-      const { value, done } = await reader.read();
-      if (done) throw new Error("SMTP connection closed unexpectedly");
-      buffer += decoder.decode(value, { stream: true });
+      const chunk = await conn.read();
+      if (!chunk) throw new Error("SMTP connection closed unexpectedly");
+      buffer += decoder.decode(chunk, { stream: true });
     }
   }
 
@@ -169,7 +169,7 @@ export async function sendMailSmtp(options: SmtpOptions, mail: Mail) {
   }
 
   async function command(line: string, codes: number[], label: string) {
-    await writer.write(encoder.encode(`${line}\r\n`));
+    await conn.write(encoder.encode(`${line}\r\n`));
     return expect(codes, label);
   }
 
