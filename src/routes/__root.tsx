@@ -116,10 +116,13 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-const navLinks = [
-  { hash: "services", label: "Services" },
-  { hash: "work", label: "Work" },
-  { hash: "approach", label: "Approach" },
+type NavLink = { label: string } & ({ to: "/"; hash: string } | { to: "/blog"; hash?: never });
+
+const navLinks: NavLink[] = [
+  { to: "/", hash: "services", label: "Services" },
+  { to: "/", hash: "work", label: "Work" },
+  { to: "/", hash: "approach", label: "Approach" },
+  { to: "/blog", label: "Blog" },
 ];
 
 function Header() {
@@ -158,9 +161,9 @@ function Header() {
         <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
-              key={link.hash}
-              to="/"
-              hash={link.hash}
+              key={link.label}
+              to={link.to}
+              {...("hash" in link && link.hash ? { hash: link.hash } : {})}
               className="text-[0.9375rem] font-medium text-[var(--ds-text)] transition-colors hover:text-[var(--ds-link)]"
             >
               {link.label}
@@ -190,9 +193,9 @@ function Header() {
             <nav aria-label="Mobile" className="flex flex-col gap-2 pt-10">
               {navLinks.map((link) => (
                 <Link
-                  key={link.hash}
-                  to="/"
-                  hash={link.hash}
+                  key={link.label}
+                  to={link.to}
+                  {...("hash" in link && link.hash ? { hash: link.hash } : {})}
                   onClick={() => setOpen(false)}
                   className="flex min-h-12 items-center text-lg font-medium text-[var(--ds-text)]"
                 >
@@ -267,6 +270,11 @@ function Footer() {
               <li>
                 <Link to="/" hash="approach" className={inverseLink}>
                   Approach
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className={inverseLink}>
+                  Blog
                 </Link>
               </li>
               <li>
