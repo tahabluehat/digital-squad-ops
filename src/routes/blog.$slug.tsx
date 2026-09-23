@@ -1,18 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { notFound } from "@tanstack/react-router";
+import { posts, type Post } from "@/lib/blog-posts";
 import { ArrowLeft, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())} — Digital Squad Blog` },
-      { name: "description", content: "Read this article on the Digital Squad blog." },
-      { property: "og:title", content: `${params.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())} — Digital Squad Blog` },
-      { property: "og:description", content: "Read this article on the Digital Squad blog." },
-      { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const post = loaderData?.post;
+    const title = post ? `${post.title} — Digital Squad Blog` : "Article not found — Digital Squad";
+    const desc = post?.excerpt ?? "This article could not be found.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(post ? [] : [{ name: "robots", content: "noindex" }]),
+      ],
+    };
+  },
   loader: ({ params }) => {
     const post = posts.find((p) => p.slug === params.slug);
     if (!post) throw notFound();
@@ -21,26 +28,9 @@ export const Route = createFileRoute("/blog/$slug")({
   component: BlogDetailPage,
 });
 
-const posts = [
-  {
-    slug: "digital-transformation-strategies",
-    title: "Digital Transformation Strategies for 2024",
-    image: "/images/news-1.jpg",
-  },
-  {
-    slug: "agile-teams-scale",
-    title: "How Agile Teams Scale Effectively",
-    image: "/images/news-2.jpg",
-  },
-  {
-    slug: "cloud-infrastructure-best-practices",
-    title: "Cloud Infrastructure Best Practices",
-    image: "/images/news-3.jpg",
-  },
-];
 
 function BlogDetailPage() {
-  const { post } = Route.useLoaderData() as { post: typeof posts[number] };
+  const { post } = Route.useLoaderData() as { post: Post };
 
   return (
     <>
@@ -60,23 +50,15 @@ function BlogDetailPage() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-3">
             <article className="lg:col-span-2">
-              <img src={post.image} alt={post.title} className="w-full rounded-2xl object-cover" />
-              <div className="prose prose-lg mt-10 max-w-none text-muted-foreground">
-                <p>
-                  There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn’t anything embarrassing hidden in the middle of text.
-                </p>
-                <blockquote className="border-l-4 border-[#f14836] bg-[#fff0ee] p-6 italic text-foreground">
-                  “There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words.”
-                </blockquote>
-                <p>
-                  There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable.
-                </p>
-                <ul className="list-disc pl-6">
-                  <li>There are many variations of passages of Lorem Ipsum available.</li>
-                  <li>Alteration in some form, by injected humour or randomised words.</li>
-                  <li>Passage of Lorem Ipsum, you need to be sure there isn’t anything hidden.</li>
-                  <li>There are many variations of passages of Lorem Ipsum available.</li>
-                </ul>
+              <img src={post.image} alt="" width={1280} height={720} className="w-full rounded-2xl object-cover" />
+              <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-[#f14836]">{post.category} · {post.readTime}</p>
+              <div className="mt-6 max-w-[70ch] space-y-6 text-lg leading-relaxed text-muted-foreground">
+                {post.body.map((b, i) =>
+                  b.type === "h2" ? <h2 key={i} className="section-title pt-4 text-2xl text-foreground">{b.text}</h2>
+                  : b.type === "quote" ? <blockquote key={i} className="border-l-4 border-[#f14836] bg-[#fff0ee] p-6 italic text-foreground">{b.text}</blockquote>
+                  : b.type === "ul" ? <ul key={i} className="list-disc space-y-2 pl-6">{b.items.map((it) => <li key={it}>{it}</li>)}</ul>
+                  : <p key={i}>{b.text}</p>
+                )}
               </div>
 
               <div className="mt-12 flex items-center gap-4">
