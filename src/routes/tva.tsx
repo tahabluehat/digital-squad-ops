@@ -17,11 +17,18 @@ export const Route = createFileRoute("/tva")({
 
 function TvaPage() {
   return (
-    <div className="flex h-[calc(100vh-4rem-1px)] flex-col">
+    <div className="flex flex-col">
+      <div className="ds-container py-10">
+        <h1 className="ds-heading">TVA calculator for Moroccan businesses</h1>
+        <p className="ds-lead ds-measure mt-3">
+          Enter an amount excluding or including tax and pick the TVA rate to instantly get the
+          net amount, the tax and the total. Use it to check quotes and invoices in seconds.
+        </p>
+      </div>
       <iframe
         src="https://calcul-comptable.vercel.app"
         title="TVA Calculator"
-        className="w-full flex-1 border-0"
+        className="h-[80vh] w-full border-0"
         allow="fullscreen"
       />
     </div>
