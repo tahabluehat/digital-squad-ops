@@ -73,6 +73,7 @@ const SITE_DESCRIPTION =
   "DigitalSquad helps businesses build, improve, and scale software with experienced engineers, product designers, and delivery specialists.";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { charSet: "utf-8" },

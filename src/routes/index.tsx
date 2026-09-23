@@ -10,6 +10,7 @@ const DESCRIPTION =
   "Senior engineers, product designers, and delivery specialists helping teams build, improve, and scale software.";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: TITLE },

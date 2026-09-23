@@ -13,6 +13,7 @@ export type Post = {
   title: string;
   excerpt: string;
   image: string;
+  imageAlt: string;
   category: string;
   readTime: string;
   body: Block[];
@@ -24,6 +25,7 @@ export const posts: Post[] = [
     title: "Digital Transformation Strategies That Actually Deliver",
     excerpt: "Transformation is less about technology and more about focus. Here is how to pick the right priorities and show progress early.",
     image: transformation,
+    imageAlt: "Team planning a digital transformation roadmap around a meeting table",
     category: "Strategy",
     readTime: "5 min read",
     body: [
@@ -41,6 +43,7 @@ export const posts: Post[] = [
     title: "How Agile Teams Scale Without Slowing Down",
     excerpt: "Adding people does not automatically add speed. These practices help growing teams keep their momentum.",
     image: agile,
+    imageAlt: "Agile team reviewing tasks on a sprint board",
     category: "Agile",
     readTime: "4 min read",
     body: [
@@ -58,6 +61,7 @@ export const posts: Post[] = [
     title: "Cloud Infrastructure Best Practices",
     excerpt: "A practical guide to building cloud platforms that are secure, reliable and cost-aware from the start.",
     image: cloud,
+    imageAlt: "Rows of cloud servers in a data centre",
     category: "Cloud",
     readTime: "6 min read",
     body: [

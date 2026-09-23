@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Briefcase, Palette, Cloud } from "lucide-react";
 
 export const Route = createFileRoute("/services")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Services — Digital Squad" },

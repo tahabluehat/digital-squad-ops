@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tva")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "TVA Calculator — Digital Squad" },

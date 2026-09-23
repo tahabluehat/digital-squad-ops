@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Users, Smile, FolderCheck } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "About — Digital Squad" },
