@@ -271,6 +271,11 @@ function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/blog" className={inverseLink}>
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <Link to="/tva" className={inverseLink}>
                   TVA calculator
                 </Link>
