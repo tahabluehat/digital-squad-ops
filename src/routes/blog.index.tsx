@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { posts } from "@/lib/blog-posts";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "Blog — Digital Squad" },
@@ -15,26 +16,6 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-const posts = [
-  {
-    slug: "digital-transformation-strategies",
-    title: "Digital Transformation Strategies for 2024",
-    excerpt: "Explore the key strategies that are driving successful digital transformation across industries this year.",
-    image: "/images/news-1.jpg",
-  },
-  {
-    slug: "agile-teams-scale",
-    title: "How Agile Teams Scale Effectively",
-    excerpt: "Learn how high-performing agile teams maintain velocity while growing in size and complexity.",
-    image: "/images/news-2.jpg",
-  },
-  {
-    slug: "cloud-infrastructure-best-practices",
-    title: "Cloud Infrastructure Best Practices",
-    excerpt: "A practical guide to building secure, scalable and cost-effective cloud infrastructure.",
-    image: "/images/news-3.jpg",
-  },
-];
 
 function BlogPage() {
   return (
@@ -51,9 +32,10 @@ function BlogPage() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <article key={post.slug} className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <img src={post.image} alt={post.title} className="h-48 w-full object-cover" />
+                <Link to="/blog/$slug" params={{ slug: post.slug }} tabIndex={-1} aria-hidden="true"><img src={post.image} alt="" width={1280} height={720} loading="lazy" className="h-48 w-full object-cover" /></Link>
                 <div className="flex flex-1 flex-col p-6">
-                  <h2 className="section-title text-xl">{post.title}</h2>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[#f14836]">{post.category} · {post.readTime}</p>
+                  <h2 className="section-title mt-2 text-xl">{post.title}</h2>
                   <p className="mt-3 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
                   <Link
                     to="/blog/$slug"
