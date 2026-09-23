@@ -4,6 +4,7 @@ import { posts, type Post } from "@/lib/blog-posts";
 import { ArrowLeft, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
+  staticData: { sitemap: true },
   head: ({ params }) => {
     const post = posts.find((p) => p.slug === params.slug);
     const title = post ? `${post.title} — Digital Squad Blog` : "Article not found — Digital Squad";
@@ -50,7 +51,7 @@ function BlogDetailPage() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-3">
             <article className="lg:col-span-2">
-              <img src={post.image} alt="" width={1280} height={720} className="w-full rounded-2xl object-cover" />
+              <img src={post.image} alt={post.imageAlt} width={1280} height={720} className="w-full rounded-2xl object-cover" />
               <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-[#f14836]">{post.category} · {post.readTime}</p>
               <div className="mt-6 max-w-[70ch] space-y-6 text-lg leading-relaxed text-muted-foreground">
                 {post.body.map((b, i) =>

@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { posts } from "@/lib/blog-posts";
 
 export const Route = createFileRoute("/blog/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Blog — Digital Squad" },
@@ -32,7 +33,7 @@ function BlogPage() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <article key={post.slug} className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <Link to="/blog/$slug" params={{ slug: post.slug }} tabIndex={-1} aria-hidden="true"><img src={post.image} alt="" width={1280} height={720} loading="lazy" className="h-48 w-full object-cover" /></Link>
+                <Link to="/blog/$slug" params={{ slug: post.slug }} tabIndex={-1} aria-hidden="true"><img src={post.image} alt={post.imageAlt} width={1280} height={720} loading="lazy" className="h-48 w-full object-cover" /></Link>
                 <div className="flex flex-1 flex-col p-6">
                   <p className="text-xs font-semibold uppercase tracking-wide text-[#f14836]">{post.category} · {post.readTime}</p>
                   <h2 className="section-title mt-2 text-xl">{post.title}</h2>

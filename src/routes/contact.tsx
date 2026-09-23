@@ -12,6 +12,7 @@ import { MapPin, Mail, Phone } from "lucide-react";
 import { submitContact } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Contact — Digital Squad" },
