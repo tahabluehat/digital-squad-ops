@@ -59,12 +59,85 @@ function toQuotedPrintable(value: string) {
   return out;
 }
 
-async function openSocket(host: string, port: number) {
-  const { connect } = await import("cloudflare:sockets");
-  const socket = connect({ hostname: host, port }, { secureTransport: "on", allowHalfOpen: false });
-  const writer = socket.writable.getWriter();
-  const reader = socket.readable.getReader();
-  return { socket, writer, reader };
+type Duplex = {
+  write: (chunk: Uint8Array) => Promise<void>;
+  read: () => Promise<Uint8Array | null>;
+  close: () => Promise<void>;
+};
+
+async function openSocket(host: string, port: number): Promise<Duplex> {
+  try {
+    const { connect } = await import(/* @vite-ignore */ "cloudflare:sockets");
+    const socket = connect({ hostname: host, port }, { secureTransport: "on", allowHalfOpen: false });
+    const writer = socket.writable.getWriter();
+    const reader = socket.readable.getReader();
+    return {
+      write: (chunk) => writer.write(chunk),
+      read: async () => {
+        const { value, done } = await reader.read();
+        return done ? null : (value as Uint8Array);
+      },
+      close: async () => {
+        try {
+          await writer.close();
+        } catch {
+          /* ignore */
+        }
+        try {
+          await socket.close();
+        } catch {
+          /* ignore */
+        }
+      },
+    };
+  } catch {
+    // Local development runs on Node, where cloudflare:sockets does not exist.
+    const tls = await import("node:tls");
+    const socket = await new Promise<import("node:tls").TLSSocket>((resolve, reject) => {
+      const s = tls.connect({ host, port, servername: host, rejectUnauthorized: false }, () => resolve(s));
+      s.setTimeout(20000, () => s.destroy(new Error("SMTP connection timed out")));
+      s.on("error", reject);
+    });
+
+    const chunks: Uint8Array[] = [];
+    let waiting: ((value: Uint8Array | null) => void) | null = null;
+    let ended = false;
+    socket.on("data", (d: Buffer) => {
+      const chunk = new Uint8Array(d);
+      if (waiting) {
+        const resolveFn = waiting;
+        waiting = null;
+        resolveFn(chunk);
+      } else {
+        chunks.push(chunk);
+      }
+    });
+    socket.on("close", () => {
+      ended = true;
+      if (waiting) {
+        const resolveFn = waiting;
+        waiting = null;
+        resolveFn(null);
+      }
+    });
+
+    return {
+      write: (chunk) =>
+        new Promise<void>((resolve, reject) =>
+          socket.write(chunk, (err) => (err ? reject(err) : resolve())),
+        ),
+      read: () =>
+        new Promise<Uint8Array | null>((resolve) => {
+          const next = chunks.shift();
+          if (next) return resolve(next);
+          if (ended) return resolve(null);
+          waiting = resolve;
+        }),
+      close: async () => {
+        socket.destroy();
+      },
+    };
+  }
 }
 
 export async function sendMailSmtp(options: SmtpOptions, mail: Mail) {
