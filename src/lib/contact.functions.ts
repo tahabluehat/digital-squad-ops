@@ -44,5 +44,21 @@ export const submitContact = createServerFn({ method: "POST" })
       throw new Error("Failed to send your message. Please try again later.");
     }
 
+    try {
+      const { sendContactEmail } = await import("./contact.server");
+      await sendContactEmail({
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        company: data.company,
+        interest: data.interest,
+      });
+    } catch (mailError) {
+      console.error("Contact email error:", mailError);
+      throw new Error(
+        "Your message was saved but the email notification failed. Please try again or email contact@digitalsquad.ma.",
+      );
+    }
+
     return { success: true };
   });
