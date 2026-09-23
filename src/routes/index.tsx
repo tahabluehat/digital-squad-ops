@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Play } from "lucide-react";
+import { ArrowRight, Check, Play, Users } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
 import { ContactSection, INTEREST_EVENT } from "@/components/site/contact-section";
 import presentationCover from "@/assets/digitalsquad-presentation.jpg";
@@ -60,6 +60,30 @@ const references = [
   { name: "Intelcia", src: "/images/brand-2.png" },
   { name: "Docaposte", src: "/images/brand-3.png" },
   { name: "Omnia Academy", src: "/images/brand-4.png" },
+];
+
+const impactStories = [
+  {
+    organization: "OCP Group",
+    project: "Sales Process Transformation",
+    description:
+      "Digital transformation of the sales process for OCP Group, a global leader in the phosphate industry.",
+    team: ["Imane", "Bakr", "Taha", "Wijdane", "Haitam"],
+  },
+  {
+    organization: "CDG Capital",
+    project: "Client Portal Development",
+    description:
+      "Development of a client portal for investment bank CDG Capital in record time.",
+    team: ["Bakr", "Taha"],
+  },
+  {
+    organization: "French Commercial Courts",
+    project: "Digital Transformation",
+    description:
+      "Contribution to the digital transformation of the commercial court system in France.",
+    team: ["Haitam"],
+  },
 ];
 
 const steps = [
@@ -252,53 +276,50 @@ function HomePage() {
         </Container>
       </section>
 
-      {/* Work */}
+      {/* Impact */}
       <section
         id="work"
-        className="ds-section scroll-mt-24"
-        style={{ backgroundColor: "var(--ds-surface-subtle)" }}
+        className="on-navy ds-section scroll-mt-24 overflow-hidden bg-navy"
       >
         <Container>
           <SectionHeading
-            eyebrow="Selected work"
-            title="Engineering that fits the business context."
-            description="A short view of engagements our team has delivered. Details are kept to what we can describe accurately."
+            eyebrow="Selected engagements"
+            title="Our Impact and success stories"
+            description="Digital products and transformation programmes delivered by DigitalSquad team members across industry, finance, and public services."
+            inverse
           />
-          <div className="mt-12 space-y-8">
-            <article
-              className="grid gap-6 rounded-[var(--ds-radius-card)] border bg-white p-6 lg:grid-cols-3 lg:p-8"
-              style={{ borderColor: "var(--ds-border)" }}
-            >
-              <h3 className="ds-subheading">CDG Capital</h3>
-              <div className="lg:col-span-2 space-y-4 text-[var(--ds-text-secondary)]">
-                <p>
-                  <span className="font-semibold text-[var(--ds-text)]">Context.</span> A financial
-                  institution modernising internal business applications.
+          <div className="mt-14 border-t border-navy-border">
+            {impactStories.map((story, index) => (
+              <article
+                key={story.organization}
+                className="group relative grid gap-6 border-b border-navy-border py-9 transition-[background-color,padding] duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] hover:bg-navy-raised sm:px-6 sm:hover:px-8 lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-11"
+              >
+                <span
+                  className="absolute inset-y-0 left-0 w-1 origin-center scale-y-0 bg-brand transition-transform duration-[var(--ds-duration-normal)] ease-[var(--ds-ease)] group-hover:scale-y-100"
+                  aria-hidden="true"
+                />
+                <div className="lg:col-span-4">
+                  <p className="font-display text-sm font-semibold text-inverse-link">
+                    0{index + 1} / {story.organization}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-inverse-text">
+                    {story.project}
+                  </h3>
+                </div>
+                <p className="max-w-2xl text-base leading-relaxed text-inverse-secondary lg:col-span-5">
+                  {story.description}
                 </p>
-                <p>
-                  <span className="font-semibold text-[var(--ds-text)]">Our contribution.</span>{" "}
-                  DigitalSquad engineers worked alongside the internal team on application
-                  development and delivery practices.
-                </p>
-              </div>
-            </article>
-            <article
-              className="grid gap-6 rounded-[var(--ds-radius-card)] border bg-white p-6 lg:grid-cols-3 lg:p-8"
-              style={{ borderColor: "var(--ds-border)" }}
-            >
-              <h3 className="ds-subheading">OCP</h3>
-              <div className="lg:col-span-2 space-y-4 text-[var(--ds-text-secondary)]">
-                <p>
-                  <span className="font-semibold text-[var(--ds-text)]">Context.</span> A large
-                  industrial group running digital programmes across multiple sites.
-                </p>
-                <p>
-                  <span className="font-semibold text-[var(--ds-text)]">Our contribution.</span>{" "}
-                  Engineering and delivery support on digital applications within the wider
-                  programme.
-                </p>
-              </div>
-            </article>
+                <div className="lg:col-span-3 lg:border-l lg:border-navy-border lg:pl-8">
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase text-inverse-secondary">
+                    <Users className="h-4 w-4 text-brand" aria-hidden="true" />
+                    Team members involved
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-inverse-text">
+                    {story.team.join(", ")}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
         </Container>
       </section>
