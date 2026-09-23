@@ -61,6 +61,12 @@ export async function sendContactEmail(input: ContactEmailInput) {
   const fromEmail = process.env["SMTP_FROM_EMAIL"] ?? user;
   const to = process.env["CONTACT_TO_EMAIL"] ?? fromEmail;
 
+  // The mailbox is hosted on serveur100.heberjahiz.com; its TLS certificate is
+  // issued for that hostname, so connect with it to keep certificate validation on.
+  const tlsHost =
+    process.env["SMTP_TLS_HOST"] ??
+    (host === "mail.digitalsquad.ma" ? "serveur100.heberjahiz.com" : host);
+
   const { sendMailSmtp } = await import("./smtp.server");
 
   const text =
