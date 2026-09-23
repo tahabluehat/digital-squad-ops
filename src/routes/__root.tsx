@@ -163,7 +163,7 @@ function Header() {
             <Link
               key={link.label}
               to={link.to}
-              hash={link.hash}
+              {...("hash" in link && link.hash ? { hash: link.hash } : {})}
               className="text-[0.9375rem] font-medium text-[var(--ds-text)] transition-colors hover:text-[var(--ds-link)]"
             >
               {link.label}
@@ -195,7 +195,7 @@ function Header() {
                 <Link
                   key={link.label}
                   to={link.to}
-                  hash={link.hash}
+                  {...("hash" in link && link.hash ? { hash: link.hash } : {})}
                   onClick={() => setOpen(false)}
                   className="flex min-h-12 items-center text-lg font-medium text-[var(--ds-text)]"
                 >
