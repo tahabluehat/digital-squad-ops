@@ -180,14 +180,19 @@ function HomePage() {
       </section>
 
       {/* Credibility */}
-      <section className="border-y py-10" style={{ borderColor: "var(--ds-border)" }}>
+      <section
+        className="border-y py-14"
+        style={{ borderColor: "var(--ds-border)", backgroundColor: "var(--ds-surface-subtle)" }}
+      >
         <Container>
-          <p className="text-sm font-semibold text-[var(--ds-text-secondary)]">
-            Teams we have delivered software for
-          </p>
-          <ul className="mt-6 flex flex-wrap items-center gap-x-12 gap-y-6">
+          <div className="flex items-center gap-6" aria-hidden="true">
+            <span className="h-px flex-1" style={{ backgroundColor: "var(--ds-border)" }} />
+            <p className="ds-eyebrow">Teams we have delivered software for</p>
+            <span className="h-px flex-1" style={{ backgroundColor: "var(--ds-border)" }} />
+          </div>
+          <ul className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             {references.map((ref) => (
-              <li key={ref.name}>
+              <li key={ref.name} className="ds-logo-tile">
                 <img
                   src={ref.src}
                   alt={ref.name}

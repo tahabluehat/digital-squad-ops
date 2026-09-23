@@ -312,3 +312,42 @@
     background-color: var(--ds-inverse-raised);
   }
 }
+
+@utility ds-logo-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
+  padding-inline: 1.75rem;
+  border-radius: var(--ds-radius-card);
+  border: 1px solid var(--ds-border);
+  background-color: var(--ds-surface);
+  box-shadow: var(--ds-shadow-sm);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+
+  & img {
+    filter: grayscale(1);
+    opacity: 0.65;
+    transition:
+      filter 180ms ease,
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-4px);
+    box-shadow: var(--ds-shadow-md);
+    border-color: var(--ds-primary);
+  }
+
+  &:hover img,
+  &:focus-within img {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
