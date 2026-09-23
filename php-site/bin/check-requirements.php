@@ -20,6 +20,9 @@ foreach (['storage/uploads', 'storage/sessions', 'storage/cache/htmlpurifier'] a
     printf("  %-28s %s\n", $dir, $w ? 'writable' : 'NOT WRITABLE');
 }
 printf("  config/config.php            %s\n", is_file("$root/config/config.php") ? 'present' : 'MISSING');
-printf("  upload_max_filesize=%s post_max_size=%s (need >= 6M)\n", ini_get('upload_max_filesize'), ini_get('post_max_size'));
+$bytes = function (string $v): int { $n = (int) $v; $u = strtolower(substr(trim($v), -1)); return $n * ($u === 'g' ? 1 << 30 : ($u === 'm' ? 1 << 20 : ($u === 'k' ? 1024 : 1))); };
+$up = $bytes((string) ini_get('upload_max_filesize')) >= 5 << 20 && $bytes((string) ini_get('post_max_size')) >= 6 << 20;
+$ok = $ok && $up;
+printf("  upload_max_filesize=%s post_max_size=%s %s\n", ini_get('upload_max_filesize'), ini_get('post_max_size'), $up ? 'OK' : 'TOO LOW (set upload_max_filesize=6M, post_max_size=8M)');
 echo $ok ? "\nAll required checks passed.\n" : "\nFix the items above before going live.\n";
 exit($ok ? 0 : 1);
