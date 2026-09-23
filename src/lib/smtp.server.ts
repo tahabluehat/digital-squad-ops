@@ -213,20 +213,11 @@ export async function sendMailSmtp(options: SmtpOptions, mail: Mail) {
 
     const message = `${headers.join("\r\n")}\r\n\r\n${body}`;
     const escaped = message.replace(/\r?\n/g, "\r\n").replace(/\r\n\./g, "\r\n..");
-    await writer.write(encoder.encode(`${escaped}\r\n.\r\n`));
+    await conn.write(encoder.encode(`${escaped}\r\n.\r\n`));
     await expect([250], "message");
 
-    await writer.write(encoder.encode("QUIT\r\n"));
+    await conn.write(encoder.encode("QUIT\r\n"));
   } finally {
-    try {
-      await writer.close();
-    } catch {
-      /* ignore */
-    }
-    try {
-      await socket.close();
-    } catch {
-      /* ignore */
-    }
+    await conn.close();
   }
 }
