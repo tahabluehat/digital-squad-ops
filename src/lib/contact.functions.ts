@@ -12,28 +12,6 @@ const contactSchema = z.object({
 export const submitContact = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
-    const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
-
-    const details = [
-      data.company ? `Company: ${data.company}` : null,
-      data.interest ? `Area of interest: ${data.interest}` : null,
-    ].filter(Boolean);
-
-    const message = details.length
-      ? `${details.join("\n")}\n\n${data.message}`
-      : data.message;
-
-    const { error } = await admin.from("contact_submissions").insert({
-      name: data.name,
-      email: data.email,
-      message,
-    });
-
-    if (error) {
-      console.error("Contact submission error:", error);
-      throw new Error("Failed to send your message. Please try again later.");
-    }
-
     try {
       const { sendContactEmail } = await import("./contact.server");
       await sendContactEmail({
@@ -46,7 +24,7 @@ export const submitContact = createServerFn({ method: "POST" })
     } catch (mailError) {
       console.error("Contact email error:", mailError);
       throw new Error(
-        "Your message was saved but the email notification failed. Please try again or email contact@digitalsquad.ma.",
+        "We could not send your message. Please try again or email contact@digitalsquad.ma.",
       );
     }
 
