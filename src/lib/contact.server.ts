@@ -77,7 +77,7 @@ export async function sendContactEmail(input: ContactEmailInput) {
     `\n${input.message}\n`;
 
   await sendMailSmtp(
-    { host, port, user, password },
+    { host: tlsHost, port, user, password },
     {
       from: `DigitalSquad Website <${fromEmail}>`,
       to,
