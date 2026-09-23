@@ -3,8 +3,8 @@ export type ContactEmailInput = {
   name: string;
   email: string;
   message: string;
-  company?: string;
-  interest?: string;
+  company?: string | undefined;
+  interest?: string | undefined;
 };
 
 function escapeHtml(s: string) {

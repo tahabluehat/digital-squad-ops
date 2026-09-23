@@ -67,7 +67,9 @@ type Duplex = {
 
 async function openSocket(host: string, port: number): Promise<Duplex> {
   try {
-    const { connect } = await import(/* @vite-ignore */ "cloudflare:sockets");
+    const { connect } = (await import(/* @vite-ignore */ "cloudflare:sockets" as string)) as {
+      connect: (addr: { hostname: string; port: number }, opts: Record<string, unknown>) => any;
+    };
     const socket = connect({ hostname: host, port }, { secureTransport: "on", allowHalfOpen: false });
     const writer = socket.writable.getWriter();
     const reader = socket.readable.getReader();
