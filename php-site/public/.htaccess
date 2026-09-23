@@ -1,0 +1,22 @@
+# DigitalSquad — Apache / LiteSpeed configuration (public_html)
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Send everything that is not a real file to the front controller,
+  # so direct article links and browser refreshes work.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Never serve hidden or config files.
+<FilesMatch "^\.|\.(sql|md|log|ini|sh|example)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|ico)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
