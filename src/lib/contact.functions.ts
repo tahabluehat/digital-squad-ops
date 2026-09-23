@@ -10,19 +10,9 @@ const contactSchema = z.object({
 });
 
 export const submitContact = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => contactSchema.parse(data))
+  .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
-    const { createClient } = await import("@supabase/supabase-js");
-    const supabaseUrl = process.env["VITE_SUPABASE_URL"];
-    const serviceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error("Backend is not configured for contact submissions.");
-    }
-
-    const admin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
+    const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
 
     const details = [
       data.company ? `Company: ${data.company}` : null,
