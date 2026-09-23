@@ -182,10 +182,10 @@ function HomePage() {
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
               <p className="ds-eyebrow">Software engineering &amp; consulting</p>
-              <h1 className="ds-display mt-4 text-balance">Senior engineers. Stronger products.</h1>
+<h1 className="ds-display mt-4 text-balance">Move faster. Create lasting value.</h1>
               <p className="ds-lead ds-measure mt-6">
-                DigitalSquad helps businesses build, improve, and scale software with experienced
-                engineers, product designers, and delivery specialists.
+                Agile delivery and engineering excellence, focused on the outcomes that matter to
+                your business.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link to="/" hash="contact" className={buttonStyles.primary}>
