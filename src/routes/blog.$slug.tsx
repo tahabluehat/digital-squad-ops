@@ -4,8 +4,8 @@ import { posts, type Post } from "@/lib/blog-posts";
 import { ArrowLeft, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
-  head: ({ loaderData }) => {
-    const post = loaderData?.post;
+  head: ({ params }) => {
+    const post = posts.find((p) => p.slug === params.slug);
     const title = post ? `${post.title} — Digital Squad Blog` : "Article not found — Digital Squad";
     const desc = post?.excerpt ?? "This article could not be found.";
     return {
