@@ -3,8 +3,8 @@ export type ContactEmailInput = {
   name: string;
   email: string;
   message: string;
-  company?: string;
-  interest?: string;
+  company?: string | undefined;
+  interest?: string | undefined;
 };
 
 function escapeHtml(s: string) {
@@ -61,17 +61,13 @@ export async function sendContactEmail(input: ContactEmailInput) {
   const fromEmail = process.env["SMTP_FROM_EMAIL"] ?? user;
   const to = process.env["CONTACT_TO_EMAIL"] ?? fromEmail;
 
-  const { SMTPClient } = await import("emailjs");
+  // The mailbox is hosted on serveur100.heberjahiz.com; its TLS certificate is
+  // issued for that hostname, so connect with it to keep certificate validation on.
+  const tlsHost =
+    process.env["SMTP_TLS_HOST"] ??
+    (host === "mail.digitalsquad.ma" ? "serveur100.heberjahiz.com" : host);
 
-  const smtp = new SMTPClient({
-    user,
-    password,
-    host,
-    port,
-    ssl: port === 465 ? { rejectUnauthorized: false } : false,
-    tls: port !== 465 ? { rejectUnauthorized: false } : false,
-    timeout: 20000,
-  });
+  const { sendMailSmtp } = await import("./smtp.server");
 
   const text =
     `New message from the DigitalSquad website\n\n` +
@@ -80,12 +76,15 @@ export async function sendContactEmail(input: ContactEmailInput) {
     (input.interest ? `Area of interest: ${input.interest}\n` : "") +
     `\n${input.message}\n`;
 
-  await smtp.sendAsync({
-    from: `DigitalSquad Website <${fromEmail}>`,
-    to,
-    "reply-to": `${input.name} <${input.email}>`,
-    subject: `New enquiry from ${input.name}${input.interest ? ` — ${input.interest}` : ""}`,
-    text,
-    attachment: [{ data: emailHtml(input), alternative: true }],
-  } as never);
+  await sendMailSmtp(
+    { host: tlsHost, port, user, password },
+    {
+      from: `DigitalSquad Website <${fromEmail}>`,
+      to,
+      replyTo: `${input.name} <${input.email}>`,
+      subject: `New enquiry from ${input.name}${input.interest ? ` — ${input.interest}` : ""}`,
+      text,
+      html: emailHtml(input),
+    },
+  );
 }
