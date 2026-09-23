@@ -82,7 +82,7 @@ const impactStories = [
     project: "Digital Transformation",
     description:
       "Contribution to the digital transformation of the commercial court system in France.",
-    team: ["Haitam"],
+    team: ["Haitam", "Taha"],
   },
 ];
 
