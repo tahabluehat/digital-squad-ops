@@ -116,7 +116,9 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-const navLinks: { to: string; hash?: string; label: string }[] = [
+type NavLink = { label: string } & ({ to: "/"; hash: string } | { to: "/blog"; hash?: never });
+
+const navLinks: NavLink[] = [
   { to: "/", hash: "services", label: "Services" },
   { to: "/", hash: "work", label: "Work" },
   { to: "/", hash: "approach", label: "Approach" },
