@@ -61,7 +61,7 @@ try {
 
     if ($path === '/sitemap.xml') {
         header('Content-Type: application/xml; charset=utf-8');
-        $rows = db()->query("SELECT slug, updated_at FROM blog_articles WHERE status = 'published' ORDER BY published_at DESC")->fetchAll();
+        $rows = !db_available() ? [] : db()->query("SELECT slug, updated_at FROM blog_articles WHERE status = 'published' ORDER BY published_at DESC")->fetchAll();
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
         echo '<url><loc>' . e(base_url()) . '</loc></url>' . "\n";
         echo '<url><loc>' . e(base_url('blog')) . '</loc></url>' . "\n";
@@ -85,7 +85,7 @@ try {
     }
 
     /* ---------------- Admin ---------------- */
-    if ($isAdmin) {
+    if ($isAdmin && db_available()) {
         require APP_ROOT . '/app/admin.php';
     }
 

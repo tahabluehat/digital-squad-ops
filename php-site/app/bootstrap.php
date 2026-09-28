@@ -9,11 +9,17 @@ if (PHP_VERSION_ID < 80100) {
 define('APP_ROOT', dirname(__DIR__));
 
 $configFile = APP_ROOT . '/config/config.php';
-if (!is_file($configFile)) {
-    http_response_code(500);
-    exit('Missing config/config.php. Copy config/config.example.php and fill it in.');
-}
-$GLOBALS['ds_config'] = require $configFile;
+// Without config/config.php the public site still works (no blog/admin/email).
+$GLOBALS['ds_config'] = is_file($configFile) ? require $configFile : [
+    'app' => [
+        'env' => 'production',
+        'base_url' => 'https://www.digitalsquad.ma',
+        'key' => hash('sha256', __FILE__ . php_uname()),
+        'timezone' => 'Africa/Casablanca',
+    ],
+    'db' => null,
+    'mail' => null,
+];
 
 date_default_timezone_set(config('app.timezone', 'UTC'));
 mb_internal_encoding('UTF-8');

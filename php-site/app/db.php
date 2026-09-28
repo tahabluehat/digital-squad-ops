@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
 
+function db_available(): bool
+{
+    return is_array(config('db'));
+}
+
 function db(): PDO
 {
+    if (!db_available()) {
+        throw new PDOException('Database not configured');
+    }
     static $pdo = null;
     if ($pdo instanceof PDO) {
         return $pdo;

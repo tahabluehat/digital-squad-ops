@@ -5,11 +5,13 @@ const ARTICLES_PER_PAGE = 9;
 
 function published_count(): int
 {
+    if (!db_available()) { return 0; }
     return (int) db()->query("SELECT COUNT(*) FROM blog_articles WHERE status = 'published'")->fetchColumn();
 }
 
 function published_articles(int $limit, int $offset = 0): array
 {
+    if (!db_available()) { return []; }
     $stmt = db()->prepare("SELECT id, title, slug, excerpt, cover_image, cover_alt, published_at
         FROM blog_articles WHERE status = 'published'
         ORDER BY published_at DESC, id DESC LIMIT ? OFFSET ?");
@@ -21,6 +23,7 @@ function published_articles(int $limit, int $offset = 0): array
 
 function published_article_by_slug(string $slug): ?array
 {
+    if (!db_available()) { return null; }
     $stmt = db()->prepare("SELECT * FROM blog_articles WHERE slug = ? AND status = 'published' LIMIT 1");
     $stmt->execute([$slug]);
     return $stmt->fetch() ?: null;
