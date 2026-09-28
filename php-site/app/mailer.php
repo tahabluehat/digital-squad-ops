@@ -8,6 +8,9 @@ declare(strict_types=1);
 function smtp_send(string $replyToEmail, string $replyToName, string $subject, string $text, string $html): void
 {
     $m = config('mail');
+    if (!is_array($m)) {
+        throw new RuntimeException('Mail not configured');
+    }
     $host = (string) $m['host'];
     $port = (int) $m['port'];
     $ssl  = ($m['encryption'] ?? 'ssl') === 'ssl';
