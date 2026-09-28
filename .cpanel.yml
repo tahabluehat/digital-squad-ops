@@ -1,5 +1,18 @@
 ---
+# cPanel "Git Version Control" deployment for www.digitalsquad.ma (HeberJahiz)
+# - Private app code  -> /home/digitsqu/digitalsquad   (NOT public)
+# - Public web files  -> /home/digitsqu/public_html
+# Never overwritten: config/config.php, uploaded images, sessions, cache.
 deployment:
   tasks:
+    - export APPPATH=/home/digitsqu/digitalsquad/
     - export DEPLOYPATH=/home/digitsqu/public_html/
-    - /bin/cp -fr * $DEPLOYPATH
+    - /bin/mkdir -p $APPPATH $DEPLOYPATH
+    - /bin/mkdir -p ${APPPATH}storage/uploads ${APPPATH}storage/sessions ${APPPATH}storage/cache/htmlpurifier
+    # Private application code (keeps server-only config and storage untouched)
+    - /usr/bin/rsync -a --delete --exclude 'public/' --exclude 'config/config.php' --exclude 'storage/' --exclude '.git*' php-site/ $APPPATH
+    # Public web root (keeps other cPanel files like .well-known and cgi-bin)
+    - /usr/bin/rsync -a --exclude '.well-known' --exclude 'cgi-bin' php-site/public/ $DEPLOYPATH
+    # Point the front controller at the private app folder
+    - /bin/sed -i "s#^\$appRoot = .*#\$appRoot = '/home/digitsqu/digitalsquad';#" ${DEPLOYPATH}index.php
+    - /bin/chmod 750 ${APPPATH}storage/uploads ${APPPATH}storage/sessions ${APPPATH}storage/cache/htmlpurifier
