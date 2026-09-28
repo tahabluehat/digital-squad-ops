@@ -2,33 +2,21 @@
 # cPanel "Git Version Control" deployment for www.digitalsquad.ma (HeberJahiz)
 #
 # Repository clone : /home/digitsqu/repositories/digital-squad-ops
-# Private app code : /home/digitsqu/digitalsquad          (NOT web accessible)
-# Public web files : /home/digitsqu/public_html           (shared with other apps)
+# Private app code : /home/digitsqu/digitalsquad   (NOT web accessible)
+# Public web files : /home/digitsqu/public_html    (shared with other apps)
 #
-# SAFETY RULES (do not remove):
-#  - NO --delete on public_html. Existing apps such as /backup-accounting
-#    (Dolibarr ERP), and any other folder already in public_html, are never
-#    touched or removed by this deployment.
-#  - Only the specific files this website owns are copied into public_html.
-#  - config/config.php, storage/ (uploads, sessions, cache) are never overwritten.
+# SAFETY: nothing is ever deleted in public_html. Only this site's own files
+# (index.php, .htaccess, favicon.ico, assets/, images/) are copied there.
+# /backup-accounting (Dolibarr) and every other folder stay untouched.
+# config/config.php and storage/ uploads are never overwritten.
+# Uses only /bin/cp and /bin/mkdir (always available on cPanel).
 deployment:
   tasks:
-    - export APPPATH=/home/digitsqu/digitalsquad/
-    - export DEPLOYPATH=/home/digitsqu/public_html/
-    - /bin/mkdir -p $APPPATH $DEPLOYPATH
-    - /bin/mkdir -p ${APPPATH}storage/uploads ${APPPATH}storage/sessions ${APPPATH}storage/cache/htmlpurifier
-
-    # 1) Private application code -> its own dedicated folder.
-    #    --delete is safe here: this folder belongs only to this website.
-    - /usr/bin/rsync -a --delete --exclude 'public/' --exclude 'config/config.php' --exclude 'storage/' --exclude '.git*' php-site/ $APPPATH
-
-    # 2) Public files -> public_html. NEVER use --delete here.
-    #    Only this site's own files are copied; every other folder is left alone.
-    - /usr/bin/rsync -a php-site/public/index.php php-site/public/.htaccess php-site/public/favicon.ico $DEPLOYPATH
-    - /usr/bin/rsync -a php-site/public/assets/ ${DEPLOYPATH}assets/
-    - /usr/bin/rsync -a php-site/public/images/ ${DEPLOYPATH}images/
-
-    # 3) Point the public front controller at the private app folder.
-    - /bin/sed -i "s#^\$appRoot = .*#\$appRoot = '/home/digitsqu/digitalsquad';#" ${DEPLOYPATH}index.php
-
-    - /bin/chmod 750 ${APPPATH}storage/uploads ${APPPATH}storage/sessions ${APPPATH}storage/cache/htmlpurifier
+    - export APPPATH=/home/digitsqu/digitalsquad
+    - export DEPLOYPATH=/home/digitsqu/public_html
+    - /bin/mkdir -p $APPPATH/storage/uploads $APPPATH/storage/sessions $APPPATH/storage/cache/htmlpurifier $APPPATH/config
+    - /bin/cp -R php-site/app php-site/bin php-site/lib php-site/migrations php-site/templates $APPPATH/
+    - /bin/cp php-site/config/config.example.php $APPPATH/config/
+    - /bin/cp php-site/public/index.php php-site/public/.htaccess php-site/public/favicon.ico $DEPLOYPATH/
+    - /bin/cp -R php-site/public/assets php-site/public/images $DEPLOYPATH/
+    - /bin/chmod 750 $APPPATH/storage/uploads $APPPATH/storage/sessions $APPPATH/storage/cache/htmlpurifier
