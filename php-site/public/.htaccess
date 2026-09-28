@@ -4,9 +4,20 @@ DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Send everything that is not a real file to the front controller,
+
+  # IMPORTANT: other applications live in sub-folders of public_html
+  # (for example /backup-accounting = Dolibarr ERP). They must keep working.
+  # Anything that is a real file or a real directory is served normally and
+  # is never handled by this website.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Extra safety: never route these folders through the front controller.
+  RewriteRule ^(backup-accounting|cgi-bin|\.well-known)(/|$) - [L]
+
+  # Everything else goes to the front controller,
   # so direct article links and browser refreshes work.
-  RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^ index.php [QSA,L]
 </IfModule>
 
