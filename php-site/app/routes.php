@@ -6,7 +6,7 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $isAdmin = str_starts_with($path, '/admin');
 
 // Enforce HTTPS in production.
-if (is_production() && !is_https() && PHP_SAPI !== 'cli') {
+if (is_production() && db_available() && !is_https() && PHP_SAPI !== 'cli') {
     redirect('https://' . ($_SERVER['HTTP_HOST'] ?? parse_url(base_url(), PHP_URL_HOST)) . ($_SERVER['REQUEST_URI'] ?? '/'), 301);
 }
 
