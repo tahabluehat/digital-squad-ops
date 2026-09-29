@@ -50,7 +50,7 @@ function slug_taken(string $slug, ?int $exceptId): bool
 
 function article_url(array $a): string
 {
-    return '/blog/' . rawurlencode($a['slug']);
+    return locale_url('blog/' . rawurlencode($a['slug']));
 }
 
 /**

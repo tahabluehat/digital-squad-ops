@@ -19,6 +19,36 @@ function request_path(): string
     return $path;
 }
 
+function current_locale(): string
+{
+    $value = $GLOBALS['ds_locale'] ?? 'en';
+    return in_array($value, ['en', 'fr', 'ar'], true) ? $value : 'en';
+}
+
+function set_locale(string $locale): void
+{
+    $GLOBALS['ds_locale'] = in_array($locale, ['en', 'fr', 'ar'], true) ? $locale : 'en';
+    $file = APP_ROOT . '/lang/' . $GLOBALS['ds_locale'] . '.php';
+    $GLOBALS['ds_translations'] = is_file($file) ? require $file : [];
+}
+
+function t(string $key): string
+{
+    return (string) (($GLOBALS['ds_translations'][$key] ?? null) ?: $key);
+}
+
+function locale_url(string $path = '', ?string $locale = null): string
+{
+    $locale = $locale ?? current_locale();
+    $path = trim($path, '/');
+    return '/' . $locale . ($path !== '' ? '/' . $path : '');
+}
+
+function locale_absolute_url(string $path = '', ?string $locale = null): string
+{
+    return rtrim((string) config('app.base_url'), '/') . locale_url($path, $locale);
+}
+
 function is_post(): bool
 {
     return ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
@@ -58,7 +88,7 @@ function render(string $template, array $vars = [], string $layout = 'layout', i
 
 function not_found(): never
 {
-    render('404', ['meta' => ['title' => 'Page not found | DigitalSquad', 'robots' => 'noindex']], 'layout', 404);
+    render('404', ['meta' => ['title' => t('notfound') . ' | DigitalSquad', 'robots' => 'noindex']], 'layout', 404);
 }
 
 function send_security_headers(bool $private = false): void
@@ -105,7 +135,16 @@ function format_date(?string $utc): string
         return '';
     }
     $d = new DateTimeImmutable($utc, new DateTimeZone('UTC'));
-    return $d->setTimezone(new DateTimeZone(date_default_timezone_get()))->format('j F Y');
+    $date = $d->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    if (current_locale() === 'ar') {
+        $months = [1=>'يناير',2=>'فبراير',3=>'مارس',4=>'أبريل',5=>'مايو',6=>'يونيو',7=>'يوليو',8=>'غشت',9=>'شتنبر',10=>'أكتوبر',11=>'نونبر',12=>'دجنبر'];
+        return $date->format('j') . ' ' . $months[(int) $date->format('n')] . ' ' . $date->format('Y');
+    }
+    if (current_locale() === 'fr') {
+        $months = [1=>'janvier',2=>'février',3=>'mars',4=>'avril',5=>'mai',6=>'juin',7=>'juillet',8=>'août',9=>'septembre',10=>'octobre',11=>'novembre',12=>'décembre'];
+        return $date->format('j') . ' ' . $months[(int) $date->format('n')] . ' ' . $date->format('Y');
+    }
+    return $date->format('j F Y');
 }
 
 function iso_date(?string $utc): string

@@ -9,7 +9,7 @@
     var setOpen = function (open) {
       menu.hidden = !open;
       toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      toggle.setAttribute("aria-label", open ? (toggle.dataset.closeLabel || "Close menu") : (toggle.dataset.openLabel || "Open menu"));
       if (open) { var first = menu.querySelector("a"); if (first) first.focus(); }
     };
     toggle.addEventListener("click", function () { setOpen(menu.hidden); });
