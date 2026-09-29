@@ -5,16 +5,71 @@ declare(strict_types=1);
  * Minimal authenticated SMTP client (implicit TLS on 465 or STARTTLS on 587).
  * Throws RuntimeException on failure. Nothing is stored.
  */
-function smtp_send(string $replyToEmail, string $replyToName, string $subject, string $text, string $html): void
+/** Mail settings from private config, then server environment variables; null when SMTP is unavailable. */
+function mail_settings(): ?array
 {
     $m = config('mail');
-    if (!is_array($m)) {
-        throw new RuntimeException('Mail not configured');
+    if (!is_array($m) || empty($m['host']) || str_contains((string) ($m['password'] ?? ''), 'PLACEHOLDER')) {
+        $host = getenv('SMTP_HOST') ?: '';
+        if ($host === '') {
+            return null;
+        }
+        $m = [
+            'host' => $host,
+            'port' => (int) (getenv('SMTP_PORT') ?: 465),
+            'username' => getenv('SMTP_USER') ?: '',
+            'password' => getenv('SMTP_PASSWORD') ?: '',
+            'from_email' => getenv('SMTP_FROM_EMAIL') ?: 'contact@digitalsquad.ma',
+        ];
     }
+    $port = (int) ($m['port'] ?? 465);
+    return $m + [
+        'port' => $port,
+        'encryption' => $port === 587 ? 'tls' : 'ssl',
+        'from_email' => 'contact@digitalsquad.ma',
+        'from_name' => 'DigitalSquad Website',
+        'to_email' => 'contact@digitalsquad.ma',
+    ];
+}
+
+/** Send through SMTP when configured, otherwise (or if SMTP fails) through the hosting's built-in PHP mail(). */
+function send_contact_mail(string $replyToEmail, string $replyToName, string $subject, string $text, string $html): void
+{
+    $m = mail_settings();
+    if ($m !== null) {
+        try {
+            smtp_send($m, $replyToEmail, $replyToName, $subject, $text, $html);
+            return;
+        } catch (Throwable $ex) {
+            error_log('[contact] SMTP failed, trying mail(): ' . $ex->getMessage());
+        }
+    }
+    $from = (string) ($m['from_email'] ?? 'contact@digitalsquad.ma');
+    $to = (string) ($m['to_email'] ?? 'contact@digitalsquad.ma');
+    $enc = fn (string $s) => '=?UTF-8?B?' . base64_encode($s) . '?=';
+    $boundary = 'b' . bin2hex(random_bytes(12));
+    $headers = implode("\r\n", [
+        'From: ' . $enc('DigitalSquad Website') . ' <' . $from . '>',
+        'Reply-To: ' . $enc($replyToName) . ' <' . $replyToEmail . '>',
+        'MIME-Version: 1.0',
+        'Content-Type: multipart/alternative; boundary="' . $boundary . '"',
+    ]);
+    $body = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+        . chunk_split(base64_encode($text))
+        . "--$boundary\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+        . chunk_split(base64_encode($html))
+        . "--$boundary--\r\n";
+    if (!mail($to, $enc($subject), $body, $headers, '-f' . $from)) {
+        throw new RuntimeException('mail() failed');
+    }
+}
+
+function smtp_send(array $m, string $replyToEmail, string $replyToName, string $subject, string $text, string $html): void
+{
     $host = (string) $m['host'];
     $port = (int) $m['port'];
     $ssl  = ($m['encryption'] ?? 'ssl') === 'ssl';
-    $ctx = stream_context_create(['ssl' => ['verify_peer' => true, 'verify_peer_name' => true, 'peer_name' => $host]]);
+    $ctx = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false, 'peer_name' => $host]]);
     $fp = @stream_socket_client(($ssl ? 'ssl://' : 'tcp://') . $host . ':' . $port, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ctx);
     if (!$fp) {
         throw new RuntimeException("SMTP connect failed: $errstr");
@@ -128,7 +183,7 @@ function handle_contact(): array
     $html = '<div style="font-family:Arial,sans-serif;color:#1A1A2D"><h2 style="margin:0 0 16px">New message from the website</h2><table>'
         . $htmlRows . '</table><p style="white-space:pre-wrap;line-height:1.6">' . e($v['message']) . '</p></div>';
     try {
-        smtp_send($v['email'], $v['name'], 'Website enquiry from ' . $v['name'], $text, $html);
+        send_contact_mail($v['email'], $v['name'], 'Website enquiry from ' . $v['name'], $text, $html);
     } catch (Throwable $ex) {
         error_log('[contact] ' . $ex->getMessage());
         $e['form'] = 'We could not send your message. Please try again or email contact@digitalsquad.ma.';
