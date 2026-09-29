@@ -85,6 +85,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav-mobile .language-picker { margin-top: .5rem; }
 .nav-mobile .language-options { position: static; margin-top: .5rem; box-shadow: none; }
 .nav-cta { display: none; }
+.nav-actions { display: none; align-items: center; gap: .75rem; }
 .menu-toggle { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border: 1px solid var(--border); border-radius: var(--r-control); background: var(--surface); cursor: pointer; }
 .menu-toggle .icon { width: 1.5rem; height: 1.5rem; }
 .nav-mobile { border-top: 1px solid var(--border); background: var(--bg); }
@@ -92,7 +93,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav-mobile a:not(.btn) { display: flex; align-items: center; min-height: 3rem; text-decoration: none; font-size: 1.125rem; font-weight: 500; }
 .nav-mobile .btn { margin-top: .75rem; }
 @media (min-width: 768px) {
-  .nav-desktop { display: flex; } .nav-cta { display: inline-flex; } .menu-toggle, .nav-mobile { display: none !important; }
+  .nav-desktop { display: flex; } .nav-actions { display: flex; } .nav-cta { display: inline-flex; } .menu-toggle, .nav-mobile { display: none !important; }
 }
 
 /* Hero */
