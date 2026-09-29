@@ -4,7 +4,7 @@ import { isLocale } from "@/lib/i18n";
 export const Route = createFileRoute("/$locale")({
   staticData: { sitemap: false },
   beforeLoad: ({ params }) => {
-    if (!isLocale(params.locale)) throw redirect({ to: "/en" as never });
+    if (!isLocale(params.locale)) throw redirect({ to: "/$locale", params: { locale: "en" } });
   },
   component: LocaleLayout,
 });

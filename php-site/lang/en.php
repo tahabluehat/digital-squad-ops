@@ -1,5 +1,6 @@
 <?php return [
 'nav.services'=>'Services','nav.work'=>'Work','nav.approach'=>'Approach','nav.blog'=>'Blog','nav.cta'=>'Discuss your project','lang.label'=>'English',
+'meta.title'=>'DigitalSquad | Software Engineering & Consulting','meta.description'=>'Agile delivery and engineering excellence, focused on the outcomes that matter to your business.','error.title'=>"This page didn't load",'error.body'=>'Something went wrong on our side. Please try again in a moment.',
 'hero.eyebrow'=>'Software engineering & consulting','hero.title'=>'Move faster. Create lasting value.','hero.body'=>'Agile delivery and engineering excellence, focused on the outcomes that matter to your business.','hero.secondary'=>'Explore our expertise','hero.watch'=>'Watch our presentation',
 'refs'=>'Teams we have delivered software for','services.eyebrow'=>'Ways to work together','services.title'=>'The right support for your next step.','services.body'=>'Three clear ways to engage, depending on whether you need a product built, more capacity, or a clearer technical path.',
 'impact.eyebrow'=>'Selected engagements','impact.title'=>'Our Impact and success stories','impact.body'=>'Digital products and transformation programmes delivered by DigitalSquad team members across industry, finance, and public services.','impact.team'=>'Team members involved',

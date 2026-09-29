@@ -93,7 +93,7 @@ try {
     }
 
     // Old pages from the previous site.
-    $legacy = ['/contact' => '/#contact', '/services' => '/#services', '/about' => '/#approach'];
+    $legacy = ['/contact' => locale_url() . '#contact', '/services' => locale_url() . '#services', '/about' => locale_url() . '#approach'];
     if (isset($legacy[$path])) {
         redirect($legacy[$path], 301);
     }
@@ -117,8 +117,8 @@ function render_home(array $errors = [], array $values = [], int $status = 200):
         'values' => $values + ['interest' => in_array($_GET['interest'] ?? '', CONTACT_INTERESTS, true) ? $_GET['interest'] : ''],
         'sent'   => isset($_GET['sent']) && !$errors,
         'meta'   => [
-            'title' => 'DigitalSquad | Software Engineering & Consulting',
-            'description' => 'DigitalSquad helps businesses build, improve, and scale software with experienced engineers, product designers, and delivery specialists.',
+            'title' => t('meta.title'),
+            'description' => t('meta.description'),
             'canonical' => locale_absolute_url(),
         ],
     ], 'layout', $status);

@@ -1,6 +1,7 @@
 <?php
 /** @var array $latest @var array $errors @var array $values @var bool $sent */
 $values += ['name' => '', 'email' => '', 'company' => '', 'interest' => '', 'message' => ''];
+$interestValues = ['Build your product', 'Extend your team', 'Improve your platform'];
 $services = [
     ['Build your product', 'Turn a product idea or roadmap into working software.', ['Product and UX design', 'Frontend and backend engineering', 'Testing and QA'], 'Discuss a product'],
     ['Extend your team', 'Bring experienced specialists into your existing engineering team.', ['Software engineers and tech leads', 'Product designers and business analysts', 'Agile coaching and delivery support'], 'Discuss team support'],
@@ -84,14 +85,14 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
       <p class="lead"><?= e(t('services.body')) ?></p>
     </div>
     <div class="card-grid">
-      <?php foreach ($services as [$title, $outcome, $caps, $cta]): ?>
+      <?php foreach ($services as $serviceIndex => [$title, $outcome, $caps, $cta]): ?>
         <div class="card">
           <h3 class="subheading"><?= e($title) ?></h3>
           <p class="muted"><?= e($outcome) ?></p>
           <ul class="check-list">
             <?php foreach ($caps as $c): ?><li><?= icon('check', 'icon icon-brand') ?><span><?= e($c) ?></span></li><?php endforeach ?>
           </ul>
-          <a class="text-link" href="<?= e(locale_url()) ?>?interest=<?= e(rawurlencode($title)) ?>#contact" data-interest="<?= e($title) ?>"><?= e($cta) ?> <?= icon('arrow-right') ?></a>
+          <a class="text-link" href="<?= e(locale_url()) ?>?interest=<?= e(rawurlencode($interestValues[$serviceIndex])) ?>#contact" data-interest="<?= e($interestValues[$serviceIndex]) ?>"><?= e($cta) ?> <?= icon('arrow-right') ?></a>
         </div>
       <?php endforeach ?>
     </div>
@@ -210,8 +211,8 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
             <label for="interest"><?= e(t('contact.interest')) ?> <span class="opt">(<?= e(t('optional')) ?>)</span></label>
             <select id="interest" name="interest">
               <option value=""><?= e(t('contact.select')) ?></option>
-              <?php foreach (CONTACT_INTERESTS as $opt): ?>
-                <option<?= $values['interest'] === $opt ? ' selected' : '' ?>><?= e($opt) ?></option>
+              <?php foreach (CONTACT_INTERESTS as $interestIndex => $opt): ?>
+                <option value="<?= e($opt) ?>"<?= $values['interest'] === $opt ? ' selected' : '' ?>><?= e($services[$interestIndex][0] ?? $opt) ?></option>
               <?php endforeach ?>
             </select>
           </div>

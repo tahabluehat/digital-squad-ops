@@ -15,7 +15,7 @@ deployment:
     - export APPPATH=/home/digitsqu/digitalsquad
     - export DEPLOYPATH=/home/digitsqu/public_html
     - /bin/mkdir -p $APPPATH/storage/uploads $APPPATH/storage/sessions $APPPATH/storage/cache/htmlpurifier $APPPATH/config
-    - /bin/cp -R php-site/app php-site/bin php-site/lib php-site/migrations php-site/templates $APPPATH/
+    - /bin/cp -R php-site/app php-site/bin php-site/lang php-site/lib php-site/migrations php-site/templates $APPPATH/
     - /bin/cp php-site/config/config.example.php $APPPATH/config/
     - /bin/cp php-site/public/index.php php-site/public/.htaccess php-site/public/favicon.ico $DEPLOYPATH/
     - /bin/cp -R php-site/public/assets php-site/public/images $DEPLOYPATH/
