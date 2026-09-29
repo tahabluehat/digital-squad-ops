@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { MapPin, Mail, Phone, Loader2 } from "lucide-react";
 import { submitContact } from "@/lib/contact.functions";
 import { Container, buttonStyles } from "@/components/site/primitives";
+import { pageCopy, type Locale } from "@/lib/i18n";
 
 export const INTEREST_EVENT = "ds:select-interest";
 
@@ -31,7 +32,8 @@ const labelClass = "block text-sm font-semibold text-[var(--ds-text)]";
 const inputClass =
   "mt-2 block min-h-12 w-full rounded-[var(--ds-radius-control)] border border-[var(--ds-control-border)] bg-white px-4 py-3 text-base text-[var(--ds-text)] placeholder:text-[var(--ds-text-secondary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ds-focus)]";
 
-export function ContactSection() {
+export function ContactSection({ locale = "en" }: { locale?: Locale }) {
+  const copy = pageCopy[locale].contact;
   const sendMessage = useServerFn(submitContact);
   const [status, setStatus] = useState<string>("");
 
@@ -80,16 +82,16 @@ export function ContactSection() {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <p className="ds-eyebrow" style={{ color: "var(--ds-inverse-link)" }}>
-              Contact
+              {copy.eyebrow}
             </p>
             <h2 className="ds-heading mt-3" style={{ color: "var(--ds-inverse-text)" }}>
-              Tell us what you&apos;re building.
+              {copy.title}
             </h2>
             <p
               className="ds-lead ds-measure mt-4"
               style={{ color: "var(--ds-inverse-secondary)" }}
             >
-              Share your goals, your current challenges, or the expertise your team needs.
+              {copy.body}
             </p>
 
             <ul className="mt-10 space-y-6" style={{ color: "var(--ds-inverse-secondary)" }}>
@@ -138,7 +140,7 @@ export function ContactSection() {
               <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-6 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className={labelClass}>
-                    Name
+                    {copy.name}
                   </label>
                   <input
                     id="name"
@@ -157,7 +159,7 @@ export function ContactSection() {
 
                 <div>
                   <label htmlFor="email" className={labelClass}>
-                    Email
+                    {copy.email}
                   </label>
                   <input
                     id="email"
@@ -177,7 +179,7 @@ export function ContactSection() {
 
                 <div>
                   <label htmlFor="company" className={labelClass}>
-                    Company <span className="font-normal text-[var(--ds-text-secondary)]">(optional)</span>
+                    {copy.company} <span className="font-normal text-[var(--ds-text-secondary)]">({copy.optional})</span>
                   </label>
                   <input
                     id="company"
@@ -189,11 +191,11 @@ export function ContactSection() {
 
                 <div>
                   <label htmlFor="interest" className={labelClass}>
-                    Area of interest{" "}
-                    <span className="font-normal text-[var(--ds-text-secondary)]">(optional)</span>
+                    {copy.interest}{" "}
+                    <span className="font-normal text-[var(--ds-text-secondary)]">({copy.optional})</span>
                   </label>
                   <select id="interest" className={inputClass} {...register("interest")}>
-                    <option value="">Select an area</option>
+                    <option value="">{copy.select}</option>
                     {interestOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -204,7 +206,7 @@ export function ContactSection() {
 
                 <div className="sm:col-span-2">
                   <label htmlFor="message" className={labelClass}>
-                    Project or team need
+                    {copy.need}
                   </label>
                   <textarea
                     id="message"
@@ -228,10 +230,10 @@ export function ContactSection() {
                 <div className="sm:col-span-2 flex flex-wrap items-center gap-4">
                   <button type="submit" disabled={isSubmitting} className={buttonStyles.primary}>
                     {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-                    {isSubmitting ? "Sending…" : "Send message"}
+                    {isSubmitting ? copy.sending : copy.send}
                   </button>
                   <p className="text-sm text-[var(--ds-text-secondary)]">
-                    Or email{" "}
+                    {copy.or}{" "}
                     <a
                       href="mailto:contact@digitalsquad.ma"
                       className="underline underline-offset-4"

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Briefcase, Palette, Cloud } from "lucide-react";
 
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/services")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ServicesPage,
+  component: () => <Navigate to="/$locale/$" params={{ locale: "en", _splat: "services" }} replace />,
 });
 
 const serviceTabs = [

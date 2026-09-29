@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Users, Smile, FolderCheck } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: AboutPage,
+  component: () => <Navigate to="/$locale/$" params={{ locale: "en", _splat: "about" }} replace />,
 });
 
 const stats = [
