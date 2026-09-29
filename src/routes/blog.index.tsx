@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { posts } from "@/lib/blog-posts";
 
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: BlogPage,
+  component: () => <Navigate to="/$locale/$" params={{ locale: "en", _splat: "blog" }} replace />,
 });
 
 

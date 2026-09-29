@@ -7,6 +7,6 @@
     <time class="post-date" datetime="<?= e(iso_date($a['published_at'])) ?>"><?= e(format_date($a['published_at'])) ?></time>
     <h3 class="post-card-title"><a href="<?= e(article_url($a)) ?>"><?= e($a['title']) ?></a></h3>
     <?php if ($a['excerpt']): ?><p class="muted"><?= e($a['excerpt']) ?></p><?php endif ?>
-    <span class="text-link" aria-hidden="true">Read article <?= icon('arrow-right') ?></span>
+    <span class="text-link" aria-hidden="true"><?= e(t('blog.read')) ?> <?= icon('arrow-right') ?></span>
   </div>
 </article>

@@ -2,8 +2,8 @@
 <section class="page-intro">
   <div class="container">
     <p class="eyebrow">Blog</p>
-    <h1 class="display">Notes from the team</h1>
-    <p class="lead measure">Practical articles on software engineering, delivery, and building better products.</p>
+    <h1 class="display"><?= e(t('blog.title')) ?></h1>
+    <p class="lead measure"><?= e(t('blog.body')) ?></p>
   </div>
 </section>
 
@@ -11,9 +11,9 @@
   <div class="container">
     <?php if (!$articles): ?>
       <div class="empty-state">
-        <h2 class="subheading">No articles yet</h2>
-        <p class="muted">We haven't published anything here yet. In the meantime, you can tell us about your project.</p>
-        <a class="btn btn-secondary" href="/#contact">Discuss your project</a>
+        <h2 class="subheading"><?= e(t('blog.none')) ?></h2>
+        <p class="muted"><?= e(t('blog.empty')) ?></p>
+        <a class="btn btn-secondary" href="<?= e(locale_url()) ?>#contact"><?= e(t('nav.cta')) ?></a>
       </div>
     <?php else: ?>
       <div class="post-grid">
@@ -22,15 +22,15 @@
       <?php if ($pages > 1): ?>
         <nav class="pagination" aria-label="Pagination">
           <?php if ($page > 1): ?>
-            <a class="btn btn-secondary" href="<?= $page === 2 ? '/blog' : '/blog?page=' . ($page - 1) ?>" rel="prev"><?= icon('arrow-left') ?> Newer</a>
+            <a class="btn btn-secondary" href="<?= $page === 2 ? locale_url('blog') : locale_url('blog') . '?page=' . ($page - 1) ?>" rel="prev"><?= icon('arrow-left') ?> <?= e(t('blog.newer')) ?></a>
           <?php endif ?>
           <ol>
             <?php for ($i = 1; $i <= $pages; $i++): ?>
-              <li><a href="<?= $i === 1 ? '/blog' : '/blog?page=' . $i ?>"<?= $i === $page ? ' aria-current="page"' : '' ?>><?= $i ?></a></li>
+              <li><a href="<?= $i === 1 ? locale_url('blog') : locale_url('blog') . '?page=' . $i ?>"<?= $i === $page ? ' aria-current="page"' : '' ?>><?= $i ?></a></li>
             <?php endfor ?>
           </ol>
           <?php if ($page < $pages): ?>
-            <a class="btn btn-secondary" href="/blog?page=<?= $page + 1 ?>" rel="next">Older <?= icon('arrow-right') ?></a>
+            <a class="btn btn-secondary" href="<?= e(locale_url('blog')) ?>?page=<?= $page + 1 ?>" rel="next"><?= e(t('blog.older')) ?> <?= icon('arrow-right') ?></a>
           <?php endif ?>
         </nav>
       <?php endif ?>

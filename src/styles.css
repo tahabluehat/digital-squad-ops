@@ -2,6 +2,10 @@
 @source "../src";
 @import "tw-animate-css";
 
+html[dir="rtl"] body { font-family: "Noto Sans Arabic", "Inter", ui-sans-serif, system-ui, sans-serif; }
+html[dir="rtl"] .directional { transform: scaleX(-1); }
+.language-switcher summary::-webkit-details-marker { display: none; }
+
 @custom-variant dark (&:is(.dark *));
 
 /*

@@ -6,15 +6,17 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
-import { Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Check, ChevronDown, Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Container, buttonStyles } from "@/components/site/primitives";
+import { localeFromPath, localeInfo, locales, localizedPath, ui, type Locale } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -78,11 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: SITE_TITLE },
-      { name: "description", content: SITE_DESCRIPTION },
       { name: "author", content: "DigitalSquad" },
-      { property: "og:title", content: SITE_TITLE },
-      { property: "og:description", content: SITE_DESCRIPTION },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -93,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -104,8 +102,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const locale = localeFromPath(pathname);
   return (
-    <html lang="en">
+    <html lang={locale} dir={localeInfo[locale].dir}>
       <head>
         <HeadContent />
       </head>
@@ -126,99 +126,49 @@ const navLinks: NavLink[] = [
   { to: "/blog", label: "Blog" },
 ];
 
+function LanguageSwitcher({ locale, pathname, mobile = false }: { locale: Locale; pathname: string; mobile?: boolean }) {
+  return (
+    <details className={`language-switcher relative ${mobile ? "mt-3" : ""}`}>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[var(--ds-radius-control)] border border-[var(--ds-border)] px-3 font-medium">
+        <span aria-hidden="true">{localeInfo[locale].flag}</span><span>{localeInfo[locale].label}</span><ChevronDown className="h-4 w-4" aria-hidden="true" />
+      </summary>
+      <div className={`${mobile ? "mt-2" : "absolute end-0 top-full mt-2 min-w-44 shadow-lg"} z-50 rounded-[var(--ds-radius-card)] border border-[var(--ds-border)] bg-[var(--ds-background)] p-2`}>
+        {locales.map((item) => (
+          <a key={item} href={localizedPath(item, pathname)} lang={item} dir={localeInfo[item].dir} className="flex min-h-11 items-center gap-3 rounded-[var(--ds-radius-control)] px-3 hover:bg-[var(--ds-surface-subtle)]">
+            <span aria-hidden="true">{localeInfo[item].flag}</span><span className="flex-1">{localeInfo[item].label}</span>{item === locale && <Check className="h-4 w-4 text-[var(--ds-brand)]" aria-hidden="true" />}
+          </a>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 function Header() {
   const [open, setOpen] = useState(false);
-
-  function goToContact(event: MouseEvent<HTMLAnchorElement>) {
-    if (window.location.pathname !== "/") return;
-
-    event.preventDefault();
-    setOpen(false);
-    window.setTimeout(() => {
-      window.location.hash = "contact";
-      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, open ? 350 : 0);
-  }
-
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const locale = localeFromPath(pathname);
+  const copy = ui[locale].nav;
+  const home = `/${locale}`;
+  const links = [
+    [`${home}#services`, copy.services], [`${home}#work`, copy.work], [`${home}#approach`, copy.approach], [`${home}/blog`, copy.blog],
+  ];
   return (
-    <header
-      className="sticky top-0 z-50 w-full border-b"
-      style={{ backgroundColor: "var(--ds-background)", borderColor: "var(--ds-border)" }}
-    >
-      <Container className="flex h-20 items-center justify-between">
-        <Link to="/" className="flex items-center gap-3" aria-label="DigitalSquad home">
-          <img
-            src="/images/squad.png"
-            alt=""
-            width={40}
-            height={40}
-            className="h-10 w-auto"
-          />
-          <span className="font-display text-lg font-bold text-[var(--ds-brand)]">
-            DigitalSquad
-          </span>
-        </Link>
-
-        <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.to}
-              {...("hash" in link && link.hash ? { hash: link.hash } : {})}
-              className="text-[0.9375rem] font-medium text-[var(--ds-text)] transition-colors hover:text-[var(--ds-link)]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden md:block">
-          <a href="/#contact" onClick={goToContact} className={buttonStyles.primary}>
-            Discuss your project
-          </a>
-        </div>
-
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild className="md:hidden">
-            <button
-              type="button"
-              aria-label="Open menu"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-[var(--ds-radius-control)] border"
-              style={{ borderColor: "var(--ds-border)" }}
-            >
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-80 bg-[var(--ds-background)]">
-            <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-            <nav aria-label="Mobile" className="flex flex-col gap-2 pt-10">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  {...("hash" in link && link.hash ? { hash: link.hash } : {})}
-                  onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center text-lg font-medium text-[var(--ds-text)]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <a
-                href="/#contact"
-                onClick={goToContact}
-                className={`${buttonStyles.primary} mt-4`}
-              >
-                Discuss your project
-              </a>
-            </nav>
-          </SheetContent>
-        </Sheet>
+    <header className="sticky top-0 z-50 w-full border-b bg-[var(--ds-background)] border-[var(--ds-border)]">
+      <Container className="flex h-20 items-center justify-between gap-4">
+        <a href={home} className="flex items-center gap-3" aria-label="DigitalSquad home"><img src="/images/squad.png" alt="" width={40} height={40} className="h-10 w-auto" /><span className="font-display text-lg font-bold text-[var(--ds-brand)]">DigitalSquad</span></a>
+        <nav aria-label="Main" className="hidden items-center gap-6 md:flex">{links.map(([href, label]) => <a key={href} href={href} className="text-[0.9375rem] font-medium hover:text-[var(--ds-link)]">{label}</a>)}<LanguageSwitcher locale={locale} pathname={pathname} /></nav>
+        <div className="hidden md:block"><a href={`${home}#contact`} className={buttonStyles.primary}>{copy.cta}</a></div>
+        <Sheet open={open} onOpenChange={setOpen}><SheetTrigger asChild className="md:hidden"><button type="button" aria-label="Open menu" className="inline-flex h-12 w-12 items-center justify-center rounded-[var(--ds-radius-control)] border border-[var(--ds-border)]"><Menu className="h-6 w-6" /></button></SheetTrigger><SheetContent side={locale === "ar" ? "left" : "right"} className="w-80 bg-[var(--ds-background)]"><SheetTitle className="sr-only">Navigation</SheetTitle><nav className="flex flex-col gap-2 pt-10">{links.map(([href, label]) => <a key={href} href={href} onClick={() => setOpen(false)} className="flex min-h-12 items-center text-lg font-medium">{label}</a>)}<LanguageSwitcher locale={locale} pathname={pathname} mobile /><a href={`${home}#contact`} className={`${buttonStyles.primary} mt-4`}>{copy.cta}</a></nav></SheetContent></Sheet>
       </Container>
     </header>
   );
 }
 
 function Footer() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const locale = localeFromPath(pathname);
+  const copy = ui[locale].footer;
+  const home = `/${locale}`;
   const inverseLink =
     "text-[var(--ds-inverse-secondary)] transition-colors hover:text-[var(--ds-inverse-link)] focus-visible:text-[var(--ds-inverse-link)]";
 
@@ -245,8 +195,7 @@ function Footer() {
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "var(--ds-inverse-secondary)" }}>
-              Software engineering and consulting for teams building, improving, and scaling
-              products.
+              {copy.blurb}
             </p>
           </div>
 
@@ -255,33 +204,23 @@ function Footer() {
               className="font-display text-base font-semibold"
               style={{ color: "var(--ds-inverse-text)" }}
             >
-              Explore
+              {copy.explore}
             </h2>
             <ul className="mt-5 space-y-3 text-sm">
               <li>
-                <Link to="/" hash="services" className={inverseLink}>
-                  Services
-                </Link>
+                <a href={`${home}#services`} className={inverseLink}>{ui[locale].nav.services}</a>
               </li>
               <li>
-                <Link to="/" hash="work" className={inverseLink}>
-                  Work
-                </Link>
+                <a href={`${home}#work`} className={inverseLink}>{ui[locale].nav.work}</a>
               </li>
               <li>
-                <Link to="/" hash="approach" className={inverseLink}>
-                  Approach
-                </Link>
+                <a href={`${home}#approach`} className={inverseLink}>{ui[locale].nav.approach}</a>
               </li>
               <li>
-                <Link to="/blog" className={inverseLink}>
-                  Blog
-                </Link>
+                <a href={`${home}/blog`} className={inverseLink}>{ui[locale].nav.blog}</a>
               </li>
               <li>
-                <Link to="/tva" className={inverseLink}>
-                  TVA calculator
-                </Link>
+                <a href={`${home}/tva`} className={inverseLink}>TVA</a>
               </li>
             </ul>
           </div>
@@ -291,22 +230,18 @@ function Footer() {
               className="font-display text-base font-semibold"
               style={{ color: "var(--ds-inverse-text)" }}
             >
-              Company
+              {copy.company}
             </h2>
             <ul className="mt-5 space-y-3 text-sm">
               <li>
-                <Link to="/about" className={inverseLink}>
-                  About
-                </Link>
+                <a href={`${home}/about`} className={inverseLink}>{copy.about}</a>
               </li>
               <li>
-                <Link to="/blog" className={inverseLink}>
-                  Blog
-                </Link>
+                <a href={`${home}/blog`} className={inverseLink}>{ui[locale].nav.blog}</a>
               </li>
               <li>
                 <a href="mailto:recrutement@digitalsquad.ma" className={inverseLink}>
-                  Careers &amp; internships
+                  {copy.careers}
                 </a>
               </li>
             </ul>
@@ -317,7 +252,7 @@ function Footer() {
               className="font-display text-base font-semibold"
               style={{ color: "var(--ds-inverse-text)" }}
             >
-              Contact
+              {copy.contact}
             </h2>
             <ul className="mt-5 space-y-4 text-sm" style={{ color: "var(--ds-inverse-secondary)" }}>
               <li className="flex items-start gap-3">
@@ -375,7 +310,7 @@ function Footer() {
       <div className="border-t" style={{ borderColor: "var(--ds-inverse-border)" }}>
         <Container className="py-6">
           <p className="text-sm" style={{ color: "var(--ds-inverse-secondary)" }}>
-            © {new Date().getFullYear()} DigitalSquad. All rights reserved.
+            © {new Date().getFullYear()} DigitalSquad. {copy.rights}
           </p>
         </Container>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { ArrowRight, Check, Play, Users } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
 import { ContactSection, INTEREST_EVENT } from "@/components/site/contact-section";
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: HomePage,
+  component: () => <Navigate to="/$locale" params={{ locale: "en" }} replace />,
 });
 
 const services = [

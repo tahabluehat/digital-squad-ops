@@ -1,7 +1,7 @@
 <section class="section">
   <div class="container empty-state">
-    <h1 class="heading">This page didn't load</h1>
-    <p class="muted">Something went wrong on our side. Please try again in a moment.</p>
-    <div class="btn-row"><a class="btn btn-primary" href="/">Go home</a></div>
+    <h1 class="heading"><?= e(t('error.title')) ?></h1>
+    <p class="muted"><?= e(t('error.body')) ?></p>
+    <div class="btn-row"><a class="btn btn-primary" href="<?= e(locale_url()) ?>"><?= e(t('home')) ?></a></div>
   </div>
 </section>

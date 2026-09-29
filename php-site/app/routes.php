@@ -1,9 +1,19 @@
 <?php
 declare(strict_types=1);
 
-$path   = request_path();
+$rawPath = request_path();
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$isAdmin = str_starts_with($path, '/admin');
+$isAdmin = str_starts_with($rawPath, '/admin');
+
+if (!$isAdmin && preg_match('#^/(en|fr|ar)(/.*)?$#', $rawPath, $localeMatch)) {
+    set_locale($localeMatch[1]);
+    $path = $localeMatch[2] ?? '/';
+} elseif (!$isAdmin && in_array($rawPath, ['/', '/blog', '/contact', '/services', '/about'], true)) {
+    redirect('/en' . ($rawPath === '/' ? '' : $rawPath), 302);
+} else {
+    set_locale('en');
+    $path = $rawPath;
+}
 
 // Enforce HTTPS in production.
 if (is_production() && db_available() && !is_https() && PHP_SAPI !== 'cli') {
@@ -18,7 +28,7 @@ try {
         if ($method === 'POST') {
             [$errors, $values] = handle_contact();
             if (!$errors) {
-                redirect('/?sent=1#contact');
+                redirect(locale_url() . '?sent=1#contact');
             }
             render_home($errors, $values, 422);
         }
@@ -35,13 +45,13 @@ try {
         if ($page > $pages) {
             not_found();
         }
-        $canonical = base_url($page > 1 ? 'blog?page=' . $page : 'blog');
+        $canonical = locale_absolute_url($page > 1 ? 'blog?page=' . $page : 'blog');
         render('blog-list', [
             'articles' => published_articles(ARTICLES_PER_PAGE, ($page - 1) * ARTICLES_PER_PAGE),
             'page' => $page, 'pages' => $pages, 'total' => $total,
             'meta' => [
-                'title' => 'Blog | DigitalSquad' . ($page > 1 ? " (page $page)" : ''),
-                'description' => 'Articles and insights from the DigitalSquad team on software engineering, delivery and product development.',
+                'title' => t('blog.title') . ' | DigitalSquad' . ($page > 1 ? " ($page)" : ''),
+                'description' => t('blog.body'),
                 'canonical' => $canonical,
             ],
         ]);
@@ -63,10 +73,14 @@ try {
         header('Content-Type: application/xml; charset=utf-8');
         $rows = !db_available() ? [] : db()->query("SELECT slug, updated_at FROM blog_articles WHERE status = 'published' ORDER BY published_at DESC")->fetchAll();
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        echo '<url><loc>' . e(base_url()) . '</loc></url>' . "\n";
-        echo '<url><loc>' . e(base_url('blog')) . '</loc></url>' . "\n";
+        foreach (['en', 'fr', 'ar'] as $siteLocale) {
+            echo '<url><loc>' . e(locale_absolute_url('', $siteLocale)) . '</loc></url>' . "\n";
+            echo '<url><loc>' . e(locale_absolute_url('blog', $siteLocale)) . '</loc></url>' . "\n";
+        }
         foreach ($rows as $r) {
-            echo '<url><loc>' . e(base_url('blog/' . $r['slug'])) . '</loc><lastmod>' . e(iso_date($r['updated_at'])) . '</lastmod></url>' . "\n";
+            foreach (['en', 'fr', 'ar'] as $siteLocale) {
+                echo '<url><loc>' . e(locale_absolute_url('blog/' . $r['slug'], $siteLocale)) . '</loc><lastmod>' . e(iso_date($r['updated_at'])) . '</lastmod></url>' . "\n";
+            }
         }
         echo '</urlset>';
         exit;
@@ -79,7 +93,7 @@ try {
     }
 
     // Old pages from the previous site.
-    $legacy = ['/contact' => '/#contact', '/services' => '/#services', '/about' => '/#approach'];
+    $legacy = ['/contact' => locale_url() . '#contact', '/services' => locale_url() . '#services', '/about' => locale_url() . '#approach'];
     if (isset($legacy[$path])) {
         redirect($legacy[$path], 301);
     }
@@ -103,9 +117,9 @@ function render_home(array $errors = [], array $values = [], int $status = 200):
         'values' => $values + ['interest' => in_array($_GET['interest'] ?? '', CONTACT_INTERESTS, true) ? $_GET['interest'] : ''],
         'sent'   => isset($_GET['sent']) && !$errors,
         'meta'   => [
-            'title' => 'DigitalSquad | Software Engineering & Consulting',
-            'description' => 'DigitalSquad helps businesses build, improve, and scale software with experienced engineers, product designers, and delivery specialists.',
-            'canonical' => base_url(),
+            'title' => t('meta.title'),
+            'description' => t('meta.description'),
+            'canonical' => locale_absolute_url(),
         ],
     ], 'layout', $status);
 }
@@ -115,7 +129,7 @@ function article_meta(array $a, bool $preview = false): array
     $meta = [
         'title' => ($a['seo_title'] ?: $a['title']) . ' | DigitalSquad',
         'description' => $a['seo_description'] ?: $a['excerpt'],
-        'canonical' => base_url('blog/' . $a['slug']),
+        'canonical' => locale_absolute_url('blog/' . $a['slug']),
         'type' => 'article',
         'image' => $a['cover_image'] ? base_url('media/' . $a['cover_image']) : null,
         'published' => iso_date($a['published_at'] ?? null),

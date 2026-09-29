@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tva")({
   staticData: { sitemap: true },
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/tva")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: TvaPage,
+  component: () => <Navigate to="/$locale/$" params={{ locale: "en", _splat: "tva" }} replace />,
 });
 
 function TvaPage() {
