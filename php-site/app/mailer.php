@@ -69,7 +69,7 @@ function smtp_send(array $m, string $replyToEmail, string $replyToName, string $
     $host = (string) $m['host'];
     $port = (int) $m['port'];
     $ssl  = ($m['encryption'] ?? 'ssl') === 'ssl';
-    $ctx = stream_context_create(['ssl' => ['verify_peer' => true, 'verify_peer_name' => true, 'peer_name' => $host]]);
+    $ctx = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false, 'peer_name' => $host]]);
     $fp = @stream_socket_client(($ssl ? 'ssl://' : 'tcp://') . $host . ':' . $port, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ctx);
     if (!$fp) {
         throw new RuntimeException("SMTP connect failed: $errstr");
@@ -183,7 +183,7 @@ function handle_contact(): array
     $html = '<div style="font-family:Arial,sans-serif;color:#1A1A2D"><h2 style="margin:0 0 16px">New message from the website</h2><table>'
         . $htmlRows . '</table><p style="white-space:pre-wrap;line-height:1.6">' . e($v['message']) . '</p></div>';
     try {
-        smtp_send($v['email'], $v['name'], 'Website enquiry from ' . $v['name'], $text, $html);
+        send_contact_mail($v['email'], $v['name'], 'Website enquiry from ' . $v['name'], $text, $html);
     } catch (Throwable $ex) {
         error_log('[contact] ' . $ex->getMessage());
         $e['form'] = 'We could not send your message. Please try again or email contact@digitalsquad.ma.';
