@@ -20,7 +20,7 @@ $relative = preg_replace('#^/(?:en|fr|ar)(?=/|$)#', '', $current) ?: '';
   <?php if (!empty($meta['image'])): ?><meta property="og:image" content="<?= e($meta['image']) ?>"><meta name="twitter:image" content="<?= e($meta['image']) ?>"><?php endif ?>
   <?php if (!empty($meta['published'])): ?><meta property="article:published_time" content="<?= e($meta['published']) ?>"><?php endif ?>
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="/assets/site.css?v=2"><script src="/assets/site.js?v=2" defer></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="/assets/site.css?v=3"><script src="/assets/site.js?v=3" defer></script>
 </head><body>
 <a class="skip-link" href="#main"><?= e(t('skip')) ?></a>
 <header class="site-header"><div class="container header-inner"><a href="<?= e($home) ?>" class="brand"><img src="/images/squad.png" alt="" width="40" height="40"><span>DigitalSquad</span></a>
