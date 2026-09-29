@@ -3,7 +3,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Play, Users } from "lucide-react";
 import { Container, SectionHeading, buttonStyles } from "@/components/site/primitives";
 import { ContactSection, INTEREST_EVENT } from "@/components/site/contact-section";
-import { isLocale, localizedPath, pageCopy, type Locale } from "@/lib/i18n";
+import { isLocale, locales, localizedPath, pageCopy, type Locale } from "@/lib/i18n";
 import { localizedPosts } from "@/lib/localized-posts";
 import presentationCover from "@/assets/digitalsquad-presentation.jpg";
 
@@ -12,6 +12,8 @@ const ORIGIN = "https://digital-squad-ops.lovable.app";
 function resolveLocale(value: string): Locale {
   return isLocale(value) ? value : "en";
 }
+
+const OG_LOCALE = { en: "en_US", fr: "fr_FR", ar: "ar_MA" } as const;
 
 export function localizedHead(localeParam: string, rawPath: string) {
   const locale = resolveLocale(localeParam);
@@ -22,25 +24,98 @@ export function localizedHead(localeParam: string, rawPath: string) {
   const page = path === "blog" ? copy.blog.title : path === "about" ? copy.about.title : path === "services" ? copy.standaloneServices.title : path === "contact" ? copy.contact.eyebrow : path === "tva" ? copy.tva.title : post?.title ?? copy.meta.title;
   const description = post?.excerpt ?? (path === "blog" ? copy.blog.body : path === "about" ? copy.about.body : path === "services" ? copy.standaloneServices.body : path === "contact" ? copy.contact.body : path === "tva" ? copy.tva.body : copy.meta.description);
   const suffix = page === copy.meta.title ? "" : " — DigitalSquad";
+  const title = `${page}${suffix}`;
   const pathname = `/${locale}${path ? `/${path}` : ""}`;
+  const url = `${ORIGIN}${pathname}`;
+  const known = ["", "blog", "about", "services", "contact", "tva"].includes(path) || Boolean(post);
+
+  const organization = {
+    "@type": "Organization",
+    "@id": `${ORIGIN}/#organization`,
+    name: "DigitalSquad",
+    url: ORIGIN,
+    logo: `${ORIGIN}/images/squad.png`,
+    email: "contact@digitalsquad.ma",
+    telephone: "+212625291897",
+    address: { "@type": "PostalAddress", addressLocality: "Casablanca", addressCountry: "MA" },
+    sameAs: [
+      "https://www.linkedin.com/company/digital-squad-ma/",
+      "https://www.youtube.com/channel/UCguqMv7qfdhjTm9JZCwspYg",
+    ],
+  };
+
+  const graph: Record<string, unknown>[] = [organization];
+  if (!path) {
+    graph.push({
+      "@type": "WebSite",
+      "@id": `${ORIGIN}/#website`,
+      url,
+      name: "DigitalSquad",
+      inLanguage: locale,
+      description,
+      publisher: { "@id": `${ORIGIN}/#organization` },
+    });
+    graph.push({
+      "@type": "ProfessionalService",
+      name: "DigitalSquad",
+      url,
+      description,
+      areaServed: ["MA", "FR"],
+      provider: { "@id": `${ORIGIN}/#organization` },
+    });
+  } else {
+    graph.push({
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "DigitalSquad", item: `${ORIGIN}/${locale}` },
+        ...(post ? [{ "@type": "ListItem", position: 2, name: copy.blog.title, item: `${ORIGIN}/${locale}/blog` }] : []),
+        { "@type": "ListItem", position: post ? 3 : 2, name: page, item: url },
+      ],
+    });
+  }
+  if (post) {
+    graph.push({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.excerpt,
+      inLanguage: locale,
+      articleSection: post.category,
+      mainEntityOfPage: url,
+      author: { "@id": `${ORIGIN}/#organization` },
+      publisher: { "@id": `${ORIGIN}/#organization` },
+    });
+  }
+
   return {
     meta: [
-      { title: `${page}${suffix}` },
+      { title },
       { name: "description", content: description },
-      { property: "og:title", content: `${page}${suffix}` },
+      { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: post ? "article" : "website" },
-      { property: "og:url", content: `${ORIGIN}${pathname}` },
+      { property: "og:url", content: url },
+      { property: "og:site_name", content: "DigitalSquad" },
+      { property: "og:locale", content: OG_LOCALE[locale] },
+      ...locales.filter((code) => code !== locale).map((code) => ({ property: "og:locale:alternate", content: OG_LOCALE[code] })),
       { name: "twitter:card", content: "summary_large_image" },
-      ...(!["", "blog", "about", "services", "contact", "tva"].includes(path) && !post ? [{ name: "robots", content: "noindex" }] : []),
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "robots", content: known ? "index, follow, max-image-preview:large, max-snippet:-1" : "noindex" },
     ],
     links: [
-      { rel: "canonical", href: `${ORIGIN}${pathname}` },
-      ...(["en", "fr", "ar"] as const).map((code) => ({ rel: "alternate", hrefLang: code, href: `${ORIGIN}${localizedPath(code, pathname)}` })),
+      { rel: "canonical", href: url },
+      ...locales.map((code) => ({ rel: "alternate", hrefLang: code, href: `${ORIGIN}${localizedPath(code, pathname)}` })),
       { rel: "alternate", hrefLang: "x-default", href: `${ORIGIN}${localizedPath("en", pathname)}` },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }),
+      },
     ],
   };
 }
+
 
 function HeroVisual({ locale }: { locale: Locale }) {
   const [playing, setPlaying] = useState(false);
