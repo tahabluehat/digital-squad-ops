@@ -21,11 +21,20 @@ $relative = preg_replace('#^/(?:en|fr|ar)(?=/|$)#', '', $current) ?: '';
   <?php if (!empty($meta['published'])): ?><meta property="article:published_time" content="<?= e($meta['published']) ?>"><?php endif ?>
   <meta property="og:locale" content="<?= $locale === 'fr' ? 'fr_FR' : ($locale === 'ar' ? 'ar_MA' : 'en_US') ?>">
   <?php foreach (array_diff(array_keys($langs), [$locale]) as $alt): ?><meta property="og:locale:alternate" content="<?= $alt === 'fr' ? 'fr_FR' : ($alt === 'ar' ? 'ar_MA' : 'en_US') ?>"><?php endforeach ?>
-  <script type="application/ld+json"><?= json_encode(['@context' => 'https://schema.org', '@graph' => array_values(array_filter([
+<?php
+  $ldGraph = [
     ['@type' => 'Organization', '@id' => base_url() . '#organization', 'name' => 'DigitalSquad', 'url' => base_url(), 'logo' => base_url('images/squad.png'), 'email' => 'contact@digitalsquad.ma', 'telephone' => '+212625291897', 'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Casablanca', 'addressCountry' => 'MA'], 'sameAs' => ['https://www.linkedin.com/company/digital-squad-ma/', 'https://www.youtube.com/channel/UCguqMv7qfdhjTm9JZCwspYg']],
     ['@type' => 'WebSite', '@id' => base_url() . '#website', 'url' => base_url(), 'name' => 'DigitalSquad', 'inLanguage' => $locale, 'publisher' => ['@id' => base_url() . '#organization']],
-    ($meta['type'] ?? '') === 'article' ? ['@type' => 'BlogPosting', 'headline' => $meta['title'], 'description' => $meta['description'], 'inLanguage' => $locale, 'mainEntityOfPage' => $meta['canonical'] ?? base_url(), 'datePublished' => $meta['published'] ?? null, 'image' => $meta['image'] ?? null, 'author' => ['@id' => base_url() . '#organization'], 'publisher' => ['@id' => base_url() . '#organization']] : null,
-  ])), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+  ];
+  if (($meta['type'] ?? '') === 'article') {
+    $ldGraph[] = array_filter([
+      '@type' => 'BlogPosting', 'headline' => $meta['title'], 'description' => $meta['description'], 'inLanguage' => $locale,
+      'mainEntityOfPage' => $meta['canonical'] ?? base_url(), 'datePublished' => $meta['published'] ?? null, 'image' => $meta['image'] ?? null,
+      'author' => ['@id' => base_url() . '#organization'], 'publisher' => ['@id' => base_url() . '#organization'],
+    ], static fn ($v) => $v !== null && $v !== '');
+  }
+  ?><script type="application/ld+json"><?= json_encode(['@context' => 'https://schema.org', '@graph' => $ldGraph], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="/assets/site.css?v=3"><script src="/assets/site.js?v=3" defer></script>
 </head><body>
