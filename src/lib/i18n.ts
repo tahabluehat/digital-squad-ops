@@ -7,7 +7,7 @@ export function isLocale(value: string | undefined): value is Locale {
 }
 
 export const localeInfo = {
-  en: { label: "English", flag: "🇧🇭", dir: "ltr" },
+  en: { label: "English", flag: "🇬🇧", dir: "ltr" },
   fr: { label: "Français", flag: "🇫🇷", dir: "ltr" },
   ar: { label: "العربية", flag: "🇲🇦", dir: "rtl" },
 } as const;

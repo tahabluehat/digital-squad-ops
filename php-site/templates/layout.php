@@ -4,7 +4,7 @@ $locale = current_locale(); $dir = $locale === 'ar' ? 'rtl' : 'ltr';
 $meta = ($meta ?? []) + ['title' => 'DigitalSquad', 'description' => '', 'type' => 'website'];
 $current = request_path(); $home = locale_url();
 $nav = [[$home . '#services', t('nav.services')], [$home . '#work', t('nav.work')], [$home . '#approach', t('nav.approach')], [locale_url('blog'), t('nav.blog')]];
-$langs = ['en'=>['🇧🇭','English'],'fr'=>['🇫🇷','Français'],'ar'=>['🇲🇦','العربية']];
+$langs = ['en'=>['🇬🇧','English'],'fr'=>['🇫🇷','Français'],'ar'=>['🇲🇦','العربية']];
 $relative = preg_replace('#^/(?:en|fr|ar)(?=/|$)#', '', $current) ?: '';
 ?><!doctype html>
 <html lang="<?= e($locale) ?>" dir="<?= $dir ?>">
