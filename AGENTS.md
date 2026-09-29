@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Public pages use `/en`, `/fr`, and `/ar` locale prefixes in both React and PHP; `/admin` stays unprefixed because administration is operational and English-only.
