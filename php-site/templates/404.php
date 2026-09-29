@@ -1,8 +1,8 @@
 <section class="section">
   <div class="container empty-state">
     <p class="eyebrow">404</p>
-    <h1 class="heading">Page not found</h1>
-    <p class="muted">The page you're looking for doesn't exist or is no longer available.</p>
-    <div class="btn-row"><a class="btn btn-primary" href="/">Go home</a><a class="btn btn-secondary" href="/blog">Read the blog</a></div>
+    <h1 class="heading"><?= e(t('notfound')) ?></h1>
+    <p class="muted"><?= e(t('notfound.body')) ?></p>
+    <div class="btn-row"><a class="btn btn-primary" href="<?= e(locale_url()) ?>"><?= e(t('home')) ?></a><a class="btn btn-secondary" href="<?= e(locale_url('blog')) ?>"><?= e(t('nav.blog')) ?></a></div>
   </div>
 </section>

@@ -6,7 +6,7 @@
 <?php endif ?>
 <article class="article">
   <header class="article-header container-narrow">
-    <a class="text-link back-link" href="/blog"><?= icon('arrow-left') ?> All articles</a>
+    <a class="text-link back-link" href="<?= e(locale_url('blog')) ?>"><?= icon('arrow-left') ?> <?= e(t('blog.back')) ?></a>
     <h1 class="heading article-title"><?= e($a['title']) ?></h1>
     <?php if (!empty($a['published_at'])): ?>
       <time class="post-date" datetime="<?= e(iso_date($a['published_at'])) ?>"><?= e(format_date($a['published_at'])) ?></time>
@@ -22,8 +22,8 @@
     <?= $a['content_html'] /* sanitised with HTML Purifier on save and on preview */ ?>
   </div>
   <footer class="container-narrow article-footer">
-    <p class="muted">Want to discuss a similar challenge?</p>
-    <a class="btn btn-primary" href="/#contact">Discuss your project</a>
+    <p class="muted"><?= e(t('contact.body')) ?></p>
+    <a class="btn btn-primary" href="<?= e(locale_url()) ?>#contact"><?= e(t('nav.cta')) ?></a>
   </footer>
 </article>
 <?php if (!$preview && !empty($a['published_at'])): ?>
@@ -31,7 +31,7 @@
     '@context' => 'https://schema.org', '@type' => 'Article',
     'headline' => $a['title'], 'description' => $a['excerpt'],
     'datePublished' => iso_date($a['published_at']), 'dateModified' => iso_date($a['updated_at'] ?? $a['published_at']),
-    'mainEntityOfPage' => base_url('blog/' . $a['slug']),
+    'mainEntityOfPage' => locale_absolute_url('blog/' . $a['slug']),
     'publisher' => ['@type' => 'Organization', 'name' => 'DigitalSquad'],
 ] + ($a['cover_image'] ? ['image' => base_url('media/' . $a['cover_image'])] : []), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 <?php endif ?>

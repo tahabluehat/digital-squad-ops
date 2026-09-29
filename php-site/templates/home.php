@@ -22,33 +22,52 @@ $faqs = [
     ['Can you work on an existing codebase?', 'Yes. We usually start with a short review of the code, architecture, and delivery setup, then propose improvements in priority order.'],
     ['How do we start a discussion?', 'Send a short note about your goal or challenge through the form below, or email us directly. We\'ll reply with questions and suggest a call.'],
 ];
+if (current_locale() === 'fr') {
+    $services = [
+        ['Construire votre produit', 'Transformez une idée ou une feuille de route en logiciel opérationnel.', ['Conception produit et UX', 'Ingénierie frontend et backend', 'Tests et assurance qualité'], 'Parler d’un produit'],
+        ['Renforcer votre équipe', 'Intégrez des spécialistes expérimentés à votre équipe technique.', ['Ingénieurs logiciels et tech leads', 'Designers produit et business analysts', 'Coaching agile et accompagnement delivery'], 'Parler du renfort d’équipe'],
+        ['Améliorer votre plateforme', 'Identifiez les freins techniques et planifiez les améliorations.', ['Audit du code et de l’architecture', 'Modernisation et refactoring', 'DevOps, CI/CD et cloud'], 'Parler de votre plateforme'],
+    ];
+    $stories = [['Groupe OCP','Transformation du processus commercial','Transformation numérique du processus de vente du Groupe OCP, leader mondial de l’industrie des phosphates.','Imane, Bakr, Taha, Wijdane, Haitam'],['CDG Capital','Développement d’un portail client','Développement en un temps record d’un portail client pour la banque d’investissement CDG Capital.','Bakr, Taha'],['Tribunaux de commerce français','Transformation numérique','Contribution à la transformation numérique du système des tribunaux de commerce en France.','Haitam, Taha']];
+    $steps = [['Aligner le besoin','Nous clarifions l’objectif, les contraintes et le résultat attendu avant de commencer.'],['Construire ensemble','Des itérations courtes, un backlog partagé et des démos régulières rendent les progrès visibles.'],['Revoir et transmettre','Le code, la documentation et les environnements restent chez vous, avec des prochaines étapes claires.']];
+    $faqs = [['Pouvez-vous rejoindre une équipe existante ?','Oui. Nous nous intégrons à vos outils, processus et standards de revue de code.'],['Pouvez-vous intervenir sur un code existant ?','Oui. Nous évaluons le code et le dispositif de livraison, puis priorisons les améliorations.'],['Comment démarrer ?','Envoyez-nous une courte note via le formulaire ou par e-mail.']];
+} elseif (current_locale() === 'ar') {
+    $services = [
+        ['بناء منتجكم', 'نحوّل فكرة المنتج أو خارطة الطريق إلى برنامج جاهز للعمل.', ['تصميم المنتج وتجربة المستخدم', 'هندسة الواجهات والخلفية', 'الاختبار وضمان الجودة'], 'ناقش منتجك'],
+        ['تعزيز فريقكم', 'نضيف متخصصين ذوي خبرة إلى فريقكم الهندسي.', ['مهندسو برمجيات وقادة تقنيون', 'مصممو منتجات ومحللو أعمال', 'تدريب أجايل ودعم التسليم'], 'ناقش دعم الفريق'],
+        ['تطوير منصتكم', 'نحدد العوائق التقنية ونخطط للتحسينات القادمة.', ['تدقيق الكود والبنية', 'التحديث وإعادة الهيكلة', 'DevOps وCI/CD والسحابة'], 'ناقش منصتك'],
+    ];
+    $stories = [['مجموعة OCP','تحويل عملية المبيعات','التحول الرقمي لعملية المبيعات لدى مجموعة OCP، الرائدة عالمياً في صناعة الفوسفات.','إيمان، بكر، طه، وجدان، هيثم'],['CDG Capital','تطوير بوابة العملاء','تطوير بوابة عملاء للبنك الاستثماري CDG Capital في وقت قياسي.','بكر، طه'],['المحاكم التجارية الفرنسية','التحول الرقمي','المساهمة في التحول الرقمي لمنظومة المحاكم التجارية في فرنسا.','هيثم، طه']];
+    $steps = [['تحديد الاحتياج','نوضح الهدف والقيود والنتيجة المطلوبة قبل بدء العمل.'],['نبني معاً','دورات قصيرة وقائمة مهام مشتركة وعروض منتظمة تجعل التقدم واضحاً.'],['المراجعة والتسليم','يبقى الكود والتوثيق والبيئات لديكم، مع خطوات تالية واضحة.']];
+    $faqs = [['هل يمكنكم الانضمام إلى فريق قائم؟','نعم، نندمج مع أدواتكم وعملياتكم ومعايير مراجعة الكود.'],['هل يمكنكم العمل على كود موجود؟','نعم، نراجع الكود وإعدادات التسليم ثم نرتب التحسينات.'],['كيف نبدأ؟','أرسلوا ملاحظة قصيرة عبر النموذج أو البريد الإلكتروني.']];
+}
 $err = fn (string $k) => isset($errors[$k]) ? '<p class="field-error" id="' . $k . '-error">' . e($errors[$k]) . '</p>' : '';
 $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-describedby="' . $k . '-error"' : '';
 ?>
 <section class="section hero">
   <div class="container hero-grid">
     <div>
-      <p class="eyebrow">Software engineering &amp; consulting</p>
-      <h1 class="display">Move faster. Create lasting value.</h1>
-      <p class="lead measure">Agile delivery and engineering excellence, focused on the outcomes that matter to your business.</p>
+      <p class="eyebrow"><?= e(t('hero.eyebrow')) ?></p>
+      <h1 class="display"><?= e(t('hero.title')) ?></h1>
+      <p class="lead measure"><?= e(t('hero.body')) ?></p>
       <div class="btn-row">
-        <a href="#contact" class="btn btn-primary">Discuss your project</a>
-        <a href="#services" class="btn btn-secondary">Explore our expertise</a>
+        <a href="#contact" class="btn btn-primary"><?= e(t('nav.cta')) ?></a>
+        <a href="#services" class="btn btn-secondary"><?= e(t('hero.secondary')) ?></a>
       </div>
     </div>
     <div class="hero-visual" data-video="iRzLFHrvc7U">
       <a class="video-thumb" href="https://www.youtube.com/watch?v=iRzLFHrvc7U" aria-label="Play the DigitalSquad presentation video">
         <img src="/images/digitalsquad-presentation.jpg" alt="DigitalSquad presentation featuring a team member speaking" width="1280" height="720" fetchpriority="high">
       </a>
-      <a class="text-link video-link" href="https://www.youtube.com/watch?v=iRzLFHrvc7U"><?= icon('play') ?> Watch our presentation <?= icon('arrow-right') ?></a>
+      <a class="text-link video-link" href="https://www.youtube.com/watch?v=iRzLFHrvc7U"><?= icon('play') ?> <?= e(t('hero.watch')) ?> <?= icon('arrow-right') ?></a>
     </div>
   </div>
 </section>
 
 <section class="refs">
   <div class="container">
-    <div class="refs-label" aria-hidden="true"><span></span><p class="eyebrow">Teams we have delivered software for</p><span></span></div>
-    <p class="sr-only">Teams we have delivered software for</p>
+    <div class="refs-label" aria-hidden="true"><span></span><p class="eyebrow"><?= e(t('refs')) ?></p><span></span></div>
+    <p class="sr-only"><?= e(t('refs')) ?></p>
     <ul class="logo-grid">
       <?php foreach ($references as [$name, $src]): ?>
         <li class="logo-tile"><img src="/images/<?= e($src) ?>" alt="<?= e($name) ?>" width="140" height="48" loading="lazy"></li>
@@ -60,9 +79,9 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
 <section id="services" class="section">
   <div class="container">
     <div class="section-heading">
-      <p class="eyebrow">Ways to work together</p>
-      <h2 class="heading">The right support for your next step.</h2>
-      <p class="lead">Three clear ways to engage, depending on whether you need a product built, more capacity, or a clearer technical path.</p>
+      <p class="eyebrow"><?= e(t('services.eyebrow')) ?></p>
+      <h2 class="heading"><?= e(t('services.title')) ?></h2>
+      <p class="lead"><?= e(t('services.body')) ?></p>
     </div>
     <div class="card-grid">
       <?php foreach ($services as [$title, $outcome, $caps, $cta]): ?>
@@ -72,7 +91,7 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
           <ul class="check-list">
             <?php foreach ($caps as $c): ?><li><?= icon('check', 'icon icon-brand') ?><span><?= e($c) ?></span></li><?php endforeach ?>
           </ul>
-          <a class="text-link" href="/?interest=<?= e(rawurlencode($title)) ?>#contact" data-interest="<?= e($title) ?>"><?= e($cta) ?> <?= icon('arrow-right') ?></a>
+          <a class="text-link" href="<?= e(locale_url()) ?>?interest=<?= e(rawurlencode($title)) ?>#contact" data-interest="<?= e($title) ?>"><?= e($cta) ?> <?= icon('arrow-right') ?></a>
         </div>
       <?php endforeach ?>
     </div>
@@ -82,9 +101,9 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
 <section id="work" class="section on-navy navy">
   <div class="container">
     <div class="section-heading">
-      <p class="eyebrow eyebrow-inverse">Selected engagements</p>
-      <h2 class="heading">Our Impact and success stories</h2>
-      <p class="lead">Digital products and transformation programmes delivered by DigitalSquad team members across industry, finance, and public services.</p>
+      <p class="eyebrow eyebrow-inverse"><?= e(t('impact.eyebrow')) ?></p>
+      <h2 class="heading"><?= e(t('impact.title')) ?></h2>
+      <p class="lead"><?= e(t('impact.body')) ?></p>
     </div>
     <div class="stories">
       <?php foreach ($stories as $i => [$org, $project, $desc, $team]): ?>
@@ -95,7 +114,7 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
           </div>
           <p class="story-desc"><?= e($desc) ?></p>
           <div class="story-team">
-            <p class="story-team-label"><?= icon('users', 'icon icon-brand') ?> Team members involved</p>
+            <p class="story-team-label"><?= icon('users', 'icon icon-brand') ?> <?= e(t('impact.team')) ?></p>
             <p><?= e($team) ?></p>
           </div>
         </article>
@@ -107,9 +126,9 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
 <section id="approach" class="section">
   <div class="container">
     <div class="section-heading">
-      <p class="eyebrow">How we work</p>
-      <h2 class="heading">Clear priorities. Visible progress.</h2>
-      <p class="lead">A simple way of working that keeps scope, collaboration, and delivery visible from the first conversation.</p>
+      <p class="eyebrow"><?= e(t('approach.eyebrow')) ?></p>
+      <h2 class="heading"><?= e(t('approach.title')) ?></h2>
+      <p class="lead"><?= e(t('approach.body')) ?></p>
     </div>
     <ol class="steps">
       <?php foreach ($steps as $i => [$t, $b]): ?>
@@ -128,10 +147,10 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
   <div class="container">
     <div class="section-heading-row">
       <div class="section-heading">
-        <p class="eyebrow">From the blog</p>
-        <h2 class="heading">Latest articles</h2>
+        <p class="eyebrow"><?= e(t('blog.from')) ?></p>
+        <h2 class="heading"><?= e(t('blog.latest')) ?></h2>
       </div>
-      <a class="text-link" href="/blog">View all articles <?= icon('arrow-right') ?></a>
+      <a class="text-link" href="<?= e(locale_url('blog')) ?>"><?= e(t('blog.all')) ?> <?= icon('arrow-right') ?></a>
     </div>
     <?php if ($latest): ?>
       <div class="post-grid">
@@ -139,7 +158,7 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
       </div>
     <?php else: ?>
       <div class="empty-state empty-inline">
-        <p class="muted">Our first articles are on the way. Check back soon.</p>
+        <p class="muted"><?= e(t('blog.empty')) ?></p>
       </div>
     <?php endif ?>
   </div>
@@ -149,8 +168,8 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
   <div class="container contact-grid">
     <div>
       <p class="eyebrow eyebrow-inverse">Contact</p>
-      <h2 class="heading">Tell us about your project.</h2>
-      <p class="lead">Share a few details about your goal or team need. We'll reply with questions and suggest a call.</p>
+      <h2 class="heading"><?= e(t('contact.title')) ?></h2>
+      <p class="lead"><?= e(t('contact.body')) ?></p>
       <ul class="contact-list">
         <li><?= icon('map-pin', 'icon icon-brand') ?><span>Casablanca, Morocco</span></li>
         <li><?= icon('mail', 'icon icon-brand') ?><a href="mailto:contact@digitalsquad.ma">contact@digitalsquad.ma</a></li>
@@ -159,38 +178,38 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
     </div>
     <div class="form-panel">
       <?php if ($sent): ?>
-        <div class="alert alert-success" role="status" tabindex="-1" data-focus>Message sent. We'll be in touch shortly.</div>
+        <div class="alert alert-success" role="status" tabindex="-1" data-focus><?= e(t('contact.sent')) ?></div>
       <?php endif ?>
       <?php if (isset($errors['form'])): ?>
         <div class="alert alert-error" role="alert"><?= e($errors['form']) ?></div>
       <?php elseif ($errors): ?>
-        <div class="alert alert-error" role="alert">Please check the highlighted fields.</div>
+        <div class="alert alert-error" role="alert"><?= e(t('contact.check')) ?></div>
       <?php endif ?>
-      <form method="post" action="/#contact" class="form" data-once novalidate>
+      <form method="post" action="<?= e(locale_url()) ?>#contact" class="form" data-once novalidate>
         <input type="hidden" name="_token" value="<?= e(form_token()) ?>">
         <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="field-row">
           <div class="field">
-            <label for="name">Name <span class="req">(required)</span></label>
+            <label for="name"><?= e(t('contact.name')) ?> <span class="req">(<?= e(t('required')) ?>)</span></label>
             <input id="name" name="name" autocomplete="name" required maxlength="120" value="<?= e($values['name']) ?>"<?= $aria('name') ?>>
             <?= $err('name') ?>
           </div>
           <div class="field">
-            <label for="email">Email <span class="req">(required)</span></label>
+            <label for="email"><?= e(t('contact.email')) ?> <span class="req">(<?= e(t('required')) ?>)</span></label>
             <input id="email" name="email" type="email" autocomplete="email" required maxlength="190" value="<?= e($values['email']) ?>"<?= $aria('email') ?>>
             <?= $err('email') ?>
           </div>
         </div>
         <div class="field-row">
           <div class="field">
-            <label for="company">Company <span class="opt">(optional)</span></label>
+            <label for="company"><?= e(t('contact.company')) ?> <span class="opt">(<?= e(t('optional')) ?>)</span></label>
             <input id="company" name="company" autocomplete="organization" maxlength="160" value="<?= e($values['company']) ?>"<?= $aria('company') ?>>
             <?= $err('company') ?>
           </div>
           <div class="field">
-            <label for="interest">Area of interest <span class="opt">(optional)</span></label>
+            <label for="interest"><?= e(t('contact.interest')) ?> <span class="opt">(<?= e(t('optional')) ?>)</span></label>
             <select id="interest" name="interest">
-              <option value="">Select an option</option>
+              <option value=""><?= e(t('contact.select')) ?></option>
               <?php foreach (CONTACT_INTERESTS as $opt): ?>
                 <option<?= $values['interest'] === $opt ? ' selected' : '' ?>><?= e($opt) ?></option>
               <?php endforeach ?>
@@ -198,11 +217,11 @@ $aria = fn (string $k) => isset($errors[$k]) ? ' aria-invalid="true" aria-descri
           </div>
         </div>
         <div class="field">
-          <label for="message">Project or team need <span class="req">(required)</span></label>
+          <label for="message"><?= e(t('contact.need')) ?> <span class="req">(<?= e(t('required')) ?>)</span></label>
           <textarea id="message" name="message" rows="5" required maxlength="5000"<?= $aria('message') ?>><?= e($values['message']) ?></textarea>
           <?= $err('message') ?>
         </div>
-        <button type="submit" class="btn btn-primary btn-block" data-loading-text="Sending…">Send message</button>
+        <button type="submit" class="btn btn-primary btn-block" data-loading-text="<?= e(t('contact.sending')) ?>"><?= e(t('contact.send')) ?></button>
       </form>
     </div>
   </div>
