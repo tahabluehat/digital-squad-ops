@@ -1,7 +1,7 @@
 # DigitalSquad website — PHP edition
 
 This is the whole public website (home page, blog, contact form) and the private blog admin.
-It runs on your own PHP hosting with MySQL/MariaDB. It uses no Lovable Cloud, Supabase, Firebase or other hosted backend.
+It runs on your own PHP hosting with MySQL/MariaDB and does not require a hosted backend service.
 
 - PHP 8.1 or newer. Composer is **not** needed: the HTML sanitiser (HTML Purifier 4.17, LGPL) is included in `lib/`.
 - Required extensions: `pdo_mysql`, `mbstring`, `fileinfo`, `openssl`, `session`, `dom`, `ctype`, `json`. `intl` or `iconv` are recommended for URL slugs with accents.

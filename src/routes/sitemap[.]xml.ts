@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { posts } from "@/lib/blog-posts";
 import { locales } from "@/lib/i18n";
 
-const BASE_URL = "https://digital-squad-ops.lovable.app";
+const BASE_URL = "https://digitalsquad.ma";
 
 const escape = (value: string) =>
   value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]!);

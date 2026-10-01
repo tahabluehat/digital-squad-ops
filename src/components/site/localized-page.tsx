@@ -7,7 +7,7 @@ import { isLocale, locales, localizedPath, pageCopy, type Locale } from "@/lib/i
 import { localizedPosts } from "@/lib/localized-posts";
 import presentationCover from "@/assets/digitalsquad-presentation.jpg";
 
-const ORIGIN = "https://digital-squad-ops.lovable.app";
+const ORIGIN = "https://digitalsquad.ma";
 
 function resolveLocale(value: string): Locale {
   return isLocale(value) ? value : "en";
