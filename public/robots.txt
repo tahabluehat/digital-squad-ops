@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://digital-squad-ops.lovable.app/sitemap.xml
+Sitemap: https://digitalsquad.ma/sitemap.xml

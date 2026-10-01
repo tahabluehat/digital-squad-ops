@@ -12,7 +12,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Check, ChevronDown, Menu, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Container, buttonStyles } from "@/components/site/primitives";
@@ -40,9 +39,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -86,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -155,7 +151,7 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-[var(--ds-background)] border-[var(--ds-border)]">
       <Container className="flex h-20 items-center justify-between gap-4">
-        <a href={home} className="flex items-center gap-3" aria-label="DigitalSquad home"><img src="/images/squad.png" alt="" width={40} height={40} className="h-10 w-auto" /><span className="font-display text-lg font-bold text-[var(--ds-brand)]">DigitalSquad</span></a>
+        <a href={home} className="flex items-center gap-3" aria-label="DigitalSquad home"><img src="/images/squad.svg" alt="" width={45} height={40} className="h-10 w-auto" /><span className="font-display text-lg font-bold text-[var(--ds-brand)]">DigitalSquad</span></a>
         <nav aria-label="Main" className="hidden items-center gap-6 md:flex">{links.map(([href, label]) => <a key={href} href={href} className="text-[0.9375rem] font-medium hover:text-[var(--ds-link)]">{label}</a>)}</nav>
         <div className="hidden items-center gap-3 md:flex"><LanguageSwitcher locale={locale} pathname={pathname} /><a href={`${home}#contact`} className={buttonStyles.primary}>{copy.cta}</a></div>
         <Sheet open={open} onOpenChange={setOpen}><SheetTrigger asChild className="md:hidden"><button type="button" aria-label="Open menu" className="inline-flex h-12 w-12 items-center justify-center rounded-[var(--ds-radius-control)] border border-[var(--ds-border)]"><Menu className="h-6 w-6" /></button></SheetTrigger><SheetContent side={locale === "ar" ? "left" : "right"} className="w-80 bg-[var(--ds-background)]"><SheetTitle className="sr-only">Navigation</SheetTitle><nav className="flex flex-col gap-2 pt-10">{links.map(([href, label]) => <a key={href} href={href} onClick={() => setOpen(false)} className="flex min-h-12 items-center text-lg font-medium">{label}</a>)}<LanguageSwitcher locale={locale} pathname={pathname} mobile /><a href={`${home}#contact`} className={`${buttonStyles.primary} mt-4`}>{copy.cta}</a></nav></SheetContent></Sheet>
@@ -185,7 +181,7 @@ function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center justify-center">
-                <img src="/images/squad.png" alt="" width={32} height={32} className="h-8 w-auto" />
+                <img src="/images/squad.svg" alt="" width={36} height={32} className="h-8 w-auto" />
               </span>
               <span
                 className="font-display text-lg font-bold"
